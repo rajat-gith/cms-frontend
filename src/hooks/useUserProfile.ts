@@ -1,45 +1,53 @@
 "use client";
 
 import Cookies from "js-cookie";
-import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useState } from "react";
 import { useUserStore } from "@/store/user.store";
 import { toast } from "sonner";
 import axios from "@/lib/axios";
 import { UserProfile } from "@/types";
 
 export function useUserProfile() {
-	const { user, setUser } = useUserStore();
+	const router = useRouter();
+	const { userProfile, setUserProfile } = useUserStore();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	useEffect(() => {
-		const fetchProfile = async () => {
-			setLoading(true);
-			try {
-				const token = Cookies.get("token");
-
-				const response = await axios.get("/user/profile", {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-
-				const userResponse = response.data.data;
-				if (userResponse) {
-					setUser(userResponse);
-				} else {
-					throw new Error("User not found");
-				}
-			} catch (err) {
-				setError("Failed to load profile");
-				toast.error("Failed to load profile");
-			} finally {
-				setLoading(false);
+	const fetchProfile = useCallback(async () => {
+		setLoading(true);
+		try {
+			const token = Cookies.get("token");
+			if (!token) {
+				router.replace("/login");
+				return;
 			}
-		};
+			const response = await axios.get("/user/profile", {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+				validateStatus: () => true,
+			});
 
-		fetchProfile();
-	}, [setUser]);
+			if (response.status === 403) {
+				router.replace("/login");
+				return;
+			}
+
+			const userResponse = response.data.data;
+			console.log(userResponse);
+			if (userResponse) {
+				setUserProfile(userResponse);
+			} else {
+				throw new Error("User not found");
+			}
+		} catch (err) {
+			setError("Failed to load profile");
+			toast.error("Failed to load profile");
+		} finally {
+			setLoading(false);
+		}
+	}, [router, setUserProfile]);
 
 	const updateProfile = useCallback(
 		async (updatedData: Partial<UserProfile>) => {
@@ -48,7 +56,7 @@ export function useUserProfile() {
 				const token = Cookies.get("token");
 				if (!token) throw new Error("No auth token found");
 
-				const response = await axios.put<UserProfile>(
+				const response = await axios.put<{ data: UserProfile }>(
 					"/user/profile",
 					updatedData,
 					{
@@ -57,8 +65,9 @@ export function useUserProfile() {
 						},
 					}
 				);
+				console.log(response.data.data);
 
-				setUser(response.data);
+				setUserProfile(response.data.data);
 				toast.success("Profile updated successfully");
 				setError(null);
 			} catch (err: unknown) {
@@ -72,8 +81,8 @@ export function useUserProfile() {
 				setLoading(false);
 			}
 		},
-		[setUser]
+		[setUserProfile]
 	);
 
-	return { user, loading, error, updateProfile };
+	return { userProfile, loading, error, updateProfile, fetchProfile };
 }

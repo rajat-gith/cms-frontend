@@ -1,7 +1,11 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import axios from "@/lib/axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import Cookies from "js-cookie";
+import { useUserStore } from "@/store/user.store";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface AuthCredentials {
 	email: string;
@@ -10,12 +14,21 @@ interface AuthCredentials {
 
 export function useAuth() {
 	const router = useRouter();
+	const { setIsAuthenticated } = useUserStore();
+	const { fetchProfile } = useUserProfile(); // fetch and set user profile
 
 	const storeToken = (token: string) => {
 		Cookies.set("token", token, {
 			expires: 7, // days
 			sameSite: "Lax",
 		});
+	};
+
+	const postLogin = async (token: string) => {
+		storeToken(token);
+		setIsAuthenticated(true); // mark user as logged in
+		await fetchProfile(); // get user profile
+		router.push("/dashboard"); // navigate
 	};
 
 	const login = async ({ email, password }: AuthCredentials) => {
@@ -25,8 +38,7 @@ export function useAuth() {
 				password,
 			});
 			const token = response.data.token;
-			storeToken(token);
-			router.push("/dashboard");
+			await postLogin(token);
 		} catch (error) {
 			throw new Error("Login failed");
 		}
@@ -39,8 +51,7 @@ export function useAuth() {
 				password,
 			});
 			const token = response.data.token;
-			storeToken(token);
-			router.push("/dashboard");
+			await postLogin(token);
 		} catch (error) {
 			throw new Error("Signup failed");
 		}
@@ -53,8 +64,7 @@ export function useAuth() {
 					code: authResult.code,
 				});
 				const token = response.data.token;
-				storeToken(token);
-				router.push("/dashboard");
+				await postLogin(token);
 			} catch (err) {
 				console.error("Google auth error", err);
 			}

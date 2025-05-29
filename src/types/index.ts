@@ -33,3 +33,46 @@ export type UserProfile = {
 	phone?: string;
 	role: "user" | "admin";
 };
+export interface CountryOption {
+	isoCode: string;
+	name: string;
+}
+
+export interface StateOption {
+	isoCode: string;
+	name: string;
+}
+
+export interface CityOption {
+	name: string;
+}
+
+export interface ProfileFormProps {
+	user: any;
+	loading: boolean;
+	error: Error | null;
+	updateProfile: (data: any) => Promise<void>;
+}
+
+export interface ProfileDisplayProps {
+	user: any;
+	onEdit: () => void;
+}
+
+export interface ProfileEditModalProps {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	user: any;
+	onSave: (data: any) => Promise<void>;
+	countries: CountryOption[];
+}
+
+export interface LocationSelectProps {
+	form: any;
+	name: string;
+	label: string;
+	options: any[];
+	onValueChange: (value: string) => void;
+	disabled?: boolean;
+	placeholder?: string;
+}

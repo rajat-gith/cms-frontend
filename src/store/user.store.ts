@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type User = {
+type UserProfile = {
 	first_name?: string;
 	middle_name?: string;
 	last_name?: string;
@@ -26,24 +26,34 @@ type User = {
 };
 
 type UserStore = {
-	user: User | null;
-	setUser: (user: Partial<User>) => void;
-	clearUser: () => void;
+	userProfile: UserProfile | null;
+	isAuthenticated: boolean;
+	setUserProfile: (user: Partial<UserProfile>) => void;
+	clearUserProfile: () => void;
+	setIsAuthenticated: (status: boolean) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
-	user: null,
+	userProfile: null,
+	isAuthenticated: false,
 
-	setUser: (user) =>
+	setUserProfile: (user) =>
 		set((state) => ({
-			user: {
-				...state.user,
+			userProfile: {
+				...state.userProfile,
 				...user,
 			},
+			isAuthenticated: true,
 		})),
 
-	clearUser: () =>
+	clearUserProfile: () =>
 		set({
-			user: null,
+			userProfile: null,
+			isAuthenticated: false,
+		}),
+
+	setIsAuthenticated: (status) =>
+		set({
+			isAuthenticated: status,
 		}),
 }));

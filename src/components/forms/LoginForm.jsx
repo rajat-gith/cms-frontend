@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { validateLogin, isValidPassword } from "@/utils/validations";
+import { loginSchema } from "@/utils/validations";
 
 export default function LoginForm() {
 	const router = useRouter();
@@ -16,20 +16,28 @@ export default function LoginForm() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
-
-	const passwordValid = isValidPassword(password);
+	const [errors, setErrors] = useState({});
 
 	const handleLogin = async () => {
-		const error = validateLogin(email, password);
-		if (error) {
-			toast.error(error);
+		const result = loginSchema.safeParse({ email, password });
+
+		if (!result.success) {
+			const fieldErrors = {};
+			result.error.errors.forEach((err) => {
+				const field = err.path[0];
+				fieldErrors[field] = err.message;
+			});
+			setErrors(fieldErrors);
+			toast.error("Please fix the errors and try again.");
 			return;
 		}
 
+		setErrors({});
 		setLoading(true);
 		try {
 			await login({ email, password });
 			toast.success("Logged in successfully!");
+
 			router.push("/dashboard");
 		} catch (err) {
 			console.error(err);
@@ -40,8 +48,9 @@ export default function LoginForm() {
 	};
 
 	const handleGoogleLogin = () => {
-		if (loading) return;
-		googleLogin();
+		if (!loading) {
+			googleLogin();
+		}
 	};
 
 	return (
@@ -64,6 +73,11 @@ export default function LoginForm() {
 						onChange={(e) => setEmail(e.target.value)}
 						className="mt-1 w-full px-3 py-2 border rounded-md focus:ring focus:ring-indigo-300"
 					/>
+					{errors.email && (
+						<p className="text-sm text-red-500 mt-1">
+							{errors.email}
+						</p>
+					)}
 				</div>
 
 				<div>
@@ -80,14 +94,14 @@ export default function LoginForm() {
 						className={`mt-1 w-full px-3 py-2 border rounded-md focus:ring ${
 							password.length === 0
 								? "border-gray-300"
-								: passwordValid
-									? "border-green-500 focus:ring-green-300"
-									: "border-red-500 focus:ring-red-300"
+								: errors.password
+									? "border-red-500 focus:ring-red-300"
+									: "border-green-500 focus:ring-green-300"
 						}`}
 					/>
-					{password && !passwordValid && (
+					{errors.password && (
 						<p className="text-sm text-red-500 mt-1">
-							Password must be at least 6 characters.
+							{errors.password}
 						</p>
 					)}
 				</div>
@@ -95,7 +109,7 @@ export default function LoginForm() {
 				<Button
 					className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50"
 					onClick={handleLogin}
-					disabled={loading || !passwordValid}
+					disabled={loading}
 				>
 					{loading ? "Signing in..." : "Sign In"}
 				</Button>
