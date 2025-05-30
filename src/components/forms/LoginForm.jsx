@@ -107,7 +107,7 @@ export default function LoginForm() {
 				</div>
 
 				<Button
-					className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+					className="w-full bg-indigo-600 text-white py-2 cursor-pointer rounded-md hover:bg-indigo-700 disabled:opacity-50"
 					onClick={handleLogin}
 					disabled={loading}
 				>
@@ -126,7 +126,7 @@ export default function LoginForm() {
 				</div>
 
 				<Button
-					className="w-full flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+					className="w-full flex items-center cursor-pointer justify-center gap-2 border py-2 rounded-md hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
 					onClick={handleGoogleLogin}
 					disabled={loading}
 				>

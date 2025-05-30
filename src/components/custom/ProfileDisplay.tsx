@@ -10,7 +10,6 @@ export const ProfileDisplay = ({ user, onEdit }: ProfileDisplayProps) => {
 	return (
 		<div className="w-full px-4 py-6 sm:px-6">
 			<div className="bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl p-4 sm:p-8 space-y-6 sm:space-y-8 border border-gray-200 dark:border-gray-800">
-				{/* Header with Edit Button */}
 				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 					<h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
 						Profile Information

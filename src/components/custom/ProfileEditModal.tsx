@@ -278,12 +278,17 @@ export const ProfileEditModal = ({
 						<div className="flex justify-end gap-4">
 							<Button
 								type="button"
+								className="cursor-pointer"
 								variant="outline"
 								onClick={() => onOpenChange(false)}
 							>
 								Cancel
 							</Button>
-							<Button type="submit" disabled={isSubmitting}>
+							<Button
+								type="submit"
+								className="cursor-pointer"
+								disabled={isSubmitting}
+							>
 								{isSubmitting ? "Saving..." : "Save Changes"}
 							</Button>
 						</div>
