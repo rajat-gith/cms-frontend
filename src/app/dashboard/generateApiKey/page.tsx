@@ -78,7 +78,6 @@ export default function ApiKeyPage() {
 			const newCredential: Omit<ApiCredential, "_id"> = {
 				apiKey,
 				apiSecret: hashedSecret,
-				createdAt: new Date().toISOString(),
 			};
 
 			// Create updated credentials array
