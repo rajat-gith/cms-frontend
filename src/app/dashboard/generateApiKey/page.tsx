@@ -78,7 +78,6 @@ export default function ApiKeyPage() {
 			const newCredential: Omit<ApiCredential, "_id"> = {
 				apiKey,
 				apiSecret: hashedSecret,
-				createdAt: new Date().toISOString(),
 			};
 
 			// Create updated credentials array
@@ -290,8 +289,8 @@ export default function ApiKeyPage() {
 													</Button>
 												</div>
 												<p className="text-xs text-green-600 font-medium">
-													⚠️ Important: Copy this
-													secret now. It won't be
+												```	⚠️ Important: Copy this
+													secret now. It won&apos;t be
 													shown again.
 												</p>
 											</div>
@@ -312,14 +311,6 @@ export default function ApiKeyPage() {
 											</div>
 										)}
 									</div>
-
-									{/* Created date */}
-									<p className="text-xs text-muted-foreground">
-										Created:{" "}
-										{new Date(
-											cred.createdAt
-										).toLocaleString()}
-									</p>
 								</CardContent>
 							</Card>
 						);
