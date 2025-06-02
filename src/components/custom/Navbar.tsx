@@ -19,7 +19,7 @@ export default function Navbar() {
 	const handleLogout = () => {
 		Cookies.remove("token");
 		clearUserProfile();
-		router.replace("/login");
+		router.replace("/auth/login");
 	};
 
 	const handleLogoClick = () => {

@@ -19,7 +19,7 @@ export function useUserProfile() {
 		try {
 			const token = Cookies.get("token");
 			if (!token) {
-				router.replace("/login");
+				router.replace("/auth/login");
 				return;
 			}
 			const response = await axios.get("/user/profile", {
@@ -30,7 +30,7 @@ export function useUserProfile() {
 			});
 
 			if (response.status === 403) {
-				router.replace("/login");
+				router.replace("/auth/login");
 				return;
 			}
 
