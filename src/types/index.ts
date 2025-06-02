@@ -236,7 +236,7 @@ export type Interest = {
 };
 
 export type Education = {
-	_id: Key | null | undefined;
+	_id: string;
 	courseName: string;
 	institute: string;
 	degree: string;

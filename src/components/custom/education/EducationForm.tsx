@@ -94,10 +94,11 @@ export function EducationForm({
 	};
 
 	const addSkill = () => {
-		if (skillInput.trim() && !formData.skills.includes(skillInput.trim())) {
+		const trimmedSkill = skillInput.trim();
+		if (trimmedSkill && !(formData.skills ?? []).includes(trimmedSkill)) {
 			setFormData((prev) => ({
 				...prev,
-				skills: [...prev.skills, skillInput.trim()],
+				skills: [...(prev.skills ?? []), trimmedSkill],
 			}));
 			setSkillInput("");
 		}
@@ -106,18 +107,19 @@ export function EducationForm({
 	const removeSkill = (skill: string) => {
 		setFormData((prev) => ({
 			...prev,
-			skills: prev.skills.filter((s) => s !== skill),
+			skills: (prev.skills ?? []).filter((s) => s !== skill),
 		}));
 	};
 
 	const addCoursework = () => {
+		const trimmedCoursework = courseworkInput.trim();
 		if (
-			courseworkInput.trim() &&
-			!formData.courseworks.includes(courseworkInput.trim())
+			trimmedCoursework &&
+			!(formData.courseworks ?? []).includes(trimmedCoursework)
 		) {
 			setFormData((prev) => ({
 				...prev,
-				courseworks: [...prev.courseworks, courseworkInput.trim()],
+				courseworks: [...(prev.courseworks ?? []), trimmedCoursework],
 			}));
 			setCourseworkInput("");
 		}
@@ -126,7 +128,9 @@ export function EducationForm({
 	const removeCoursework = (coursework: string) => {
 		setFormData((prev) => ({
 			...prev,
-			courseworks: prev.courseworks.filter((c) => c !== coursework),
+			courseworks: (prev.courseworks ?? []).filter(
+				(c) => c !== coursework
+			),
 		}));
 	};
 

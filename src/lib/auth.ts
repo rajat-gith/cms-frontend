@@ -1,11 +1,10 @@
-// src/lib/auth.ts
 import axios from "./axios";
 import { cookies } from "next/headers";
 
 export async function getCurrentUser() {
 	try {
-		const cookieStore = cookies();
-		const token = (await cookieStore).get("token")?.value;
+		const cookieStore = await cookies();
+		const token = cookieStore.get("token")?.value;
 
 		if (!token) return null;
 
@@ -18,12 +17,13 @@ export async function getCurrentUser() {
 			}
 		);
 
-		if (!res.ok) return null;
+		// No need to check res.ok; if the request fails, axios throws.
+		// You can check status if you want:
+		if (res.status !== 200) return null;
 
-		const user = await res.json();
-		return user;
-	} catch (err) {
-		console.error("Failed to fetch current user:", err);
+		return res.data; // Axios response data is in res.data
+	} catch (error) {
+		// Handle errors or return null
 		return null;
 	}
 }
