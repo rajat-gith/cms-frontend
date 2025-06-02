@@ -35,19 +35,25 @@ export function EducationForm({
 		const month = String(date.getMonth() + 1).padStart(2, "0");
 		return `${date.getFullYear()}-${month}`;
 	};
+
 	const [formData, setFormData] = useState<Omit<Education, "_id">>({
 		courseName: initialData?.courseName || "",
 		institute: initialData?.institute || "",
 		degree: initialData?.degree || "",
 		periodOfCourse: {
-			startDate: formatToYearMonth(initialData.periodOfCourse.startDate),
-			endDate: formatToYearMonth(initialData?.periodOfCourse.endDate),
+			startDate: formatToYearMonth(
+				initialData?.periodOfCourse?.startDate ?? ""
+			),
+			endDate: formatToYearMonth(
+				initialData?.periodOfCourse?.endDate ?? ""
+			),
 			isOngoing: initialData?.periodOfCourse?.isOngoing || false,
 		},
 		skills: initialData?.skills || [],
 		courseworks: initialData?.courseworks || [],
 		grades: initialData?.grades || { type: "cgpa", value: 0 },
 	});
+
 	const [skillInput, setSkillInput] = useState("");
 	const [courseworkInput, setCourseworkInput] = useState("");
 
@@ -291,16 +297,11 @@ export function EducationForm({
 						<Plus className="h-4 w-4" />
 					</Button>
 				</div>
-				{formData.skills.length > 0 && (
+				{(formData.skills || []).length > 0 && (
 					<div className="flex flex-wrap gap-2">
-						{formData.skills.map((skill, index) => (
-							<Badge
-								key={index}
-								variant="secondary"
-								className="cursor-pointer"
-								onClick={() => removeSkill(skill)}
-							>
-								{skill} <X className="h-3 w-3 ml-1" />
+						{formData.skills!.map((skill, index) => (
+							<Badge key={index} variant="secondary">
+								{skill}
 							</Badge>
 						))}
 					</div>
@@ -330,9 +331,9 @@ export function EducationForm({
 						<Plus className="h-4 w-4" />
 					</Button>
 				</div>
-				{formData.courseworks.length > 0 && (
+				{(formData.courseworks || []).length > 0 && (
 					<div className="flex flex-wrap gap-2">
-						{formData.courseworks.map((coursework, index) => (
+						{formData.courseworks!.map((coursework, index) => (
 							<Badge
 								key={index}
 								variant="outline"
