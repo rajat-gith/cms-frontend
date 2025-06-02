@@ -105,7 +105,7 @@ export default function SignupForm() {
 				Already have an account?{" "}
 				<span
 					className="text-indigo-600 hover:underline cursor-pointer"
-					onClick={() => router.push("/login")}
+					onClick={() => router.push("/auth/login")}
 				>
 					Log in
 				</span>

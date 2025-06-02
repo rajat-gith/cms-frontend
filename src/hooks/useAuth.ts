@@ -15,7 +15,7 @@ interface AuthCredentials {
 export function useAuth() {
 	const router = useRouter();
 	const { setIsAuthenticated } = useUserStore();
-	const { fetchProfile } = useUserProfile(); // fetch and set user profile
+	const { fetchProfile } = useUserProfile();
 
 	const storeToken = (token: string) => {
 		Cookies.set("token", token, {
@@ -26,9 +26,9 @@ export function useAuth() {
 
 	const postLogin = async (token: string) => {
 		storeToken(token);
-		setIsAuthenticated(true); // mark user as logged in
-		await fetchProfile(); // get user profile
-		router.push("/dashboard"); // navigate
+		setIsAuthenticated(true);
+		await fetchProfile();
+		router.push("/dashboard");
 	};
 
 	const login = async ({ email, password }: AuthCredentials) => {
