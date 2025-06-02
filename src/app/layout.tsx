@@ -28,7 +28,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<GoogleOAuthProvider clientId={CLIENT_ID}>
+		<GoogleOAuthProvider clientId={CLIENT_ID!}>
 			<html lang="en" className={openSans.className}>
 				<body className="h-screen flex flex-col overflow-hidden">
 					<Navbar />

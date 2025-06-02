@@ -289,8 +289,8 @@ export default function ApiKeyPage() {
 													</Button>
 												</div>
 												<p className="text-xs text-green-600 font-medium">
-													⚠️ Important: Copy this
-													secret now. It won't be
+												```	⚠️ Important: Copy this
+													secret now. It won&apos;t be
 													shown again.
 												</p>
 											</div>
