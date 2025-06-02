@@ -311,14 +311,6 @@ export default function ApiKeyPage() {
 											</div>
 										)}
 									</div>
-
-									{/* Created date */}
-									<p className="text-xs text-muted-foreground">
-										Created:{" "}
-										{new Date(
-											cred.createdAt
-										).toLocaleString()}
-									</p>
 								</CardContent>
 							</Card>
 						);
