@@ -40,6 +40,7 @@ export function useUserModules() {
 				});
 				setModule(key, res.data);
 			} catch (err) {
+				console.error(`Failed to fetch ${key}:`, err);
 				setError(`Failed to fetch ${key}`);
 				toast.error(`Failed to load ${key}`);
 			} finally {
@@ -62,9 +63,31 @@ export function useUserModules() {
 				const res = await axios.post(`/${endpoint}`, data, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
-				addItem(key, res.data.data);
-			} catch {
+
+				console.log(`Create ${key} response:`, res.data);
+
+				let newItem;
+				if (res.data?.data) {
+					newItem = res.data.data;
+				} else if (res.data?._id) {
+					newItem = res.data;
+				} else {
+					console.warn(
+						`Unexpected API response structure for ${key}:`,
+						res.data
+					);
+					newItem = res.data;
+				}
+				if (!newItem?._id) {
+					console.error(`Created ${key} item missing _id:`, newItem);
+					throw new Error(`Invalid response: missing _id field`);
+				}
+
+				addItem(key, newItem);
+			} catch (err) {
+				console.error(`Failed to create ${key}:`, err);
 				setError(`Failed to create ${key}`);
+				throw err;
 			} finally {
 				setLoading(false);
 			}
@@ -83,12 +106,17 @@ export function useUserModules() {
 			setError(null);
 			try {
 				const endpoint = moduleToEndpoint[key];
-				await axios.put(`/${endpoint}/${id}`, data, {
+				const res = await axios.put(`/${endpoint}/${id}`, data, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
+
+				console.log(`Update ${key} response:`, res.data);
+
 				await fetchModule(key);
-			} catch {
+			} catch (err) {
+				console.error(`Failed to update ${key}:`, err);
 				setError(`Failed to update ${key}`);
+				throw err;
 			} finally {
 				setLoading(false);
 			}
@@ -103,12 +131,17 @@ export function useUserModules() {
 			setError(null);
 			try {
 				const endpoint = moduleToEndpoint[key];
-				await axios.delete(`/${endpoint}/${id}`, {
+				const res = await axios.delete(`/${endpoint}/${id}`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
+
+				console.log(`Delete ${key} response:`, res.data);
+
 				removeItem(key, id);
-			} catch {
+			} catch (err) {
+				console.error(`Failed to delete ${key}:`, err);
 				setError(`Failed to delete ${key}`);
+				throw err;
 			} finally {
 				setLoading(false);
 			}

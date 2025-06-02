@@ -122,7 +122,7 @@ export interface LocationSelectProps {
 }
 
 export type Experience = {
-	
+	_id: string;
 	title: string;
 	company: string;
 	location?: string;
@@ -143,12 +143,14 @@ export type Experience = {
 };
 
 export type Skill = {
-		name: string;
+	_id: string;
+	name: string;
 	level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
 	category?: string;
 };
 
 export type TeamMember = {
+	_id: string;
 	name: string;
 	linkedinURL?: string;
 	twitterURL?: string;
@@ -159,14 +161,14 @@ export type TeamMember = {
 };
 
 export type Language = {
-	
+	_id: string;
 	name: string;
 	proficiency?: "Basic" | "Conversational" | "Fluent" | "Native";
 	certification?: string;
 };
 
 export type Volunteering = {
-	
+	_id: string;
 	role: string;
 	organization: string;
 	cause?: string;
@@ -181,7 +183,7 @@ export type Volunteering = {
 };
 
 export type Project = {
-	
+	_id: string;
 	title: string;
 	description?: string;
 	technologies?: string[];
@@ -201,7 +203,7 @@ export type Project = {
 };
 
 export type AwardHonor = {
-	
+	_id: string;
 	title: string;
 	issuer?: string;
 	dateReceived?: string;
@@ -212,7 +214,7 @@ export type AwardHonor = {
 };
 
 export type Extracurricular = {
-	
+	_id: string;
 	title: string;
 	description?: string;
 	organization?: string;
@@ -226,7 +228,7 @@ export type Extracurricular = {
 };
 
 export type Interest = {
-	
+	_id: string;
 	title: string;
 	description?: string;
 	category?: string;
@@ -234,7 +236,7 @@ export type Interest = {
 };
 
 export type Education = {
-    _id: Key | null | undefined;
+	_id: Key | null | undefined;
 	courseName: string;
 	institute: string;
 	degree: string;
@@ -252,7 +254,8 @@ export type Education = {
 };
 
 export type Blog = {
-		title: string;
+	_id: string;
+	title: string;
 	content: string;
 	tags?: string[];
 	author: {
@@ -264,7 +267,8 @@ export type Blog = {
 };
 
 export type Certification = {
-		name: string;
+	_id: string;
+	name: string;
 	issuingOrganization: string;
 	issueDate: string;
 	expirationDate?: string;
