@@ -266,15 +266,46 @@ export type Blog = {
 	publishedAt?: string;
 };
 
-export type Certification = {
+export interface CopyState {
+	[key: string]: boolean;
+}
+
+export interface Certification {
 	_id: string;
 	name: string;
 	issuingOrganization: string;
 	issueDate: string;
 	expirationDate?: string;
-	isExpired?: boolean;
+	isExpired: boolean;
+	credentialId?: string;
+	credentialURL?: string;
+	category?: string;
+	skills: string[];
+	userId: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface CertificationFormData {
+	name: string;
+	issuingOrganization: string;
+	issueDate: string;
+	expirationDate?: string;
 	credentialId?: string;
 	credentialURL?: string;
 	category?: string;
 	skills?: string[];
-};
+}
+
+export interface CertificationCardProps {
+	certification: Certification;
+	onEdit: (certification: Certification) => void;
+	onDelete: (id: string) => void;
+}
+
+export interface CertificationFormProps {
+	certification?: Certification;
+	onSubmit: (data: CertificationFormData) => void;
+	onCancel: () => void;
+	loading?: boolean;
+}

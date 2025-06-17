@@ -7,7 +7,7 @@ import { SIDEBAR_MENU_ITEMS } from "@/utils/constants";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
-export default function Sidebar() {
+export default function Sidebar({ isCollapsed }: { isCollapsed: boolean }) {
 	const pathname = usePathname();
 	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>(
 		{}
@@ -21,7 +21,12 @@ export default function Sidebar() {
 	};
 
 	return (
-		<aside className="w-64 h-[calc(100vh-64px)] bg-muted text-muted-foreground px-4 py-6 border-r">
+		<div
+			className={cn(
+				"h-full bg-muted text-muted-foreground py-6 transition-all duration-300 ease-in-out",
+				isCollapsed ? "px-2" : "px-4"
+			)}
+		>
 			<nav className="space-y-4">
 				{SIDEBAR_MENU_ITEMS.map(
 					({ label, icon: Icon, href, children }) => {
@@ -44,14 +49,17 @@ export default function Sidebar() {
 										type="button"
 									>
 										<span className="flex items-center gap-3">
-											<Icon className="w-4 h-4" />
-											{label}
+											<Icon className="w-5 h-5" />
+											{!isCollapsed && (
+												<span>{label}</span>
+											)}
 										</span>
-										{isExpanded ? (
-											<ChevronDown className="w-4 h-4" />
-										) : (
-											<ChevronRight className="w-4 h-4" />
-										)}
+										{!isCollapsed &&
+											(isExpanded ? (
+												<ChevronDown className="w-4 h-4" />
+											) : (
+												<ChevronRight className="w-4 h-4" />
+											))}
 									</button>
 								) : (
 									<Link
@@ -63,13 +71,13 @@ export default function Sidebar() {
 												: "hover:bg-accent hover:text-accent-foreground"
 										)}
 									>
-										<Icon className="w-4 h-4" />
-										<span>{label}</span>
+										<Icon className="w-5 h-5" />
+										{!isCollapsed && <span>{label}</span>}
 									</Link>
 								)}
 
 								{/* Children menu */}
-								{hasChildren && isExpanded && (
+								{hasChildren && isExpanded && !isCollapsed && (
 									<div className="ml-6 mt-1 flex flex-col space-y-1">
 										{children.map(
 											({
@@ -101,6 +109,6 @@ export default function Sidebar() {
 					}
 				)}
 			</nav>
-		</aside>
+		</div>
 	);
 }

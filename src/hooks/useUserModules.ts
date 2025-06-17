@@ -12,7 +12,7 @@ const moduleToEndpoint: Record<keyof UserModules, string> = {
 	projects: "project",
 	experiences: "experience",
 	blogs: "blog",
-	certifications: "certification",
+	certification: "certification",
 	socialProfiles: "socialProfile",
 	skills: "skill",
 	languages: "extra/language",
@@ -53,7 +53,7 @@ export function useUserModules() {
 	const createModuleItem = useCallback(
 		async <T extends keyof UserModules>(
 			key: T,
-			data: Omit<UserModules[T][number], "_id">
+			data: Partial<Omit<UserModules[T][number], "_id">>
 		) => {
 			if (!token) return;
 			setLoading(true);

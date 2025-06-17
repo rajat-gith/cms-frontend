@@ -1,9 +1,5 @@
-import { Button } from "@/components/ui/button"
+import { CertificationsPage } from "@/components/custom/certificates/CertificationsPage";
 
-export default function HomePage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-white">
-      <Button>Click Me</Button>
-    </main>
-  )
+export default function CertificationsPageRoute() {
+	return <CertificationsPage />;
 }

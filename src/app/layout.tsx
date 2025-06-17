@@ -33,9 +33,8 @@ export default function RootLayout({
 				<body className="h-screen flex flex-col overflow-hidden">
 					<Navbar />
 					<UserProvider>
-						<div className="flex flex-1 overflow-hidden">
-							{/* Main scrollable area */}
-							<main className="flex-1 p-4">{children}</main>
+						<div className="flex-1 overflow-auto">
+							<main className="min-h-full p-4">{children}</main>
 						</div>
 					</UserProvider>
 					<Toaster richColors />

@@ -26,7 +26,7 @@ export type UserModules = {
 	skills: Skill[];
 	education: Education[];
 	blogs: Blog[];
-	certifications: Certification[];
+	certification: Certification[];
 	experiences: Experience[];
 	awardsHonors: AwardHonor[];
 	extracurriculars: Extracurricular[];
@@ -92,7 +92,7 @@ export const useUserModuleStore = create<UserModuleStore>((set) => ({
 		skills: [],
 		education: [],
 		blogs: [],
-		certifications: [],
+		certification: [],
 		experiences: [],
 		awardsHonors: [],
 		extracurriculars: [],

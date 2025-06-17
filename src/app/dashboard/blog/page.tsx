@@ -45,7 +45,6 @@ export default function BlogsPage() {
 
 	const blogs = modules.blogs || [];
 
-	// Filter blogs based on search query and status
 	const filteredBlogs = blogs.filter((blog: Blog) => {
 		const matchesSearch =
 			blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -65,17 +64,14 @@ export default function BlogsPage() {
 		return matchesSearch && matchesStatus;
 	});
 
-	// Sort blogs (published first, then by publishedAt/updatedAt)
 	const sortedBlogs = filteredBlogs.sort((a: Blog, b: Blog) => {
-		// If one is published and other is not, published comes first
 		if (a.isPublished && !b.isPublished) return -1;
 		if (!a.isPublished && b.isPublished) return 1;
 
-		// Both have same status, sort by date
 		const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
 		const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
 
-		return dateB - dateA; // Newest first
+		return dateB - dateA;
 	});
 
 	const publishedCount = blogs.filter(

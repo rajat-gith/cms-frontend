@@ -1,17 +1,24 @@
+// middleware.ts
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
 	const token = request.cookies.get("token")?.value;
-	const protectedRoutes = ["/dashboard", "/profile"];
 
-	if (
-		protectedRoutes.some((path) =>
-			request.nextUrl.pathname.startsWith(path)
-		) &&
-		!token
-	) {
+	const protectedRoutes = ["/dashboard", "/profile"];
+	const { pathname } = request.nextUrl;
+
+	const isProtected = protectedRoutes.some(
+		(path) => pathname === path || pathname.startsWith(`${path}/`)
+	);
+
+	if (isProtected && !token) {
 		return NextResponse.redirect(new URL("/auth/login", request.url));
 	}
 
 	return NextResponse.next();
 }
+
+// 👇 Add this to limit where the middleware runs
+export const config = {
+	matcher: ["/dashboard/:path*", "/profile/:path*"],
+};
