@@ -142,13 +142,6 @@ export type Experience = {
 	technologiesUsed?: string[];
 };
 
-export type Skill = {
-	_id: string;
-	name: string;
-	level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
-	category?: string;
-};
-
 export type TeamMember = {
 	_id: string;
 	name: string;
@@ -309,3 +302,41 @@ export interface CertificationFormProps {
 	onCancel: () => void;
 	loading?: boolean;
 }
+
+// types/index.ts
+export interface Skill {
+	_id: string;
+	name: string;
+	level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+	category?: string;
+	userId: string;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface CreateSkillData {
+	name: string;
+	level: "Beginner" | "Intermediate" | "Advanced" | "Expert";
+	category?: string;
+}
+
+export interface UpdateSkillData extends Partial<CreateSkillData> {}
+
+export const SKILL_LEVELS = [
+	{ value: "Beginner", label: "Beginner" },
+	{ value: "Intermediate", label: "Intermediate" },
+	{ value: "Advanced", label: "Advanced" },
+	{ value: "Expert", label: "Expert" },
+] as const;
+
+export const SKILL_CATEGORIES = [
+	{ value: "Programming", label: "Programming" },
+	{ value: "Design", label: "Design" },
+	{ value: "Marketing", label: "Marketing" },
+	{ value: "Management", label: "Management" },
+	{ value: "Communication", label: "Communication" },
+	{ value: "Technical", label: "Technical" },
+	{ value: "Creative", label: "Creative" },
+	{ value: "Analytical", label: "Analytical" },
+	{ value: "Other", label: "Other" },
+] as const;

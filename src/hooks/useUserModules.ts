@@ -22,6 +22,21 @@ const moduleToEndpoint: Record<keyof UserModules, string> = {
 	awardsHonors: "extra/award-honor",
 };
 
+const responseDataKeys: Record<keyof UserModules, [string, string]> = {
+	education: ["education", "data"],
+	projects: ["project", "data"],
+	experiences: ["experience", "data"],
+	blogs: ["blog", "data"],
+	certification: ["certification", "data"],
+	socialProfiles: ["socialProfile", "data"],
+	skills: ["skill", "data"],
+	languages: ["extra/language", "data"],
+	extracurriculars: ["extra/extracurricular", "data"],
+	volunteering: ["extra/volunteering", "data"],
+	interests: ["extra/interest", "data"],
+	awardsHonors: ["extra/award-honor", "data"],
+};
+
 export function useUserModules() {
 	const token = Cookies.get("token");
 	const [loading, setLoading] = useState(false);
@@ -38,6 +53,7 @@ export function useUserModules() {
 				const res = await axios.get(`/${endpoint}`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
+				console.log(res.data);
 				setModule(key, res.data);
 			} catch (err) {
 				console.error(`Failed to fetch ${key}:`, err);
@@ -49,7 +65,6 @@ export function useUserModules() {
 		},
 		[setModule, token]
 	);
-
 	const createModuleItem = useCallback(
 		async <T extends keyof UserModules>(
 			key: T,
@@ -67,23 +82,40 @@ export function useUserModules() {
 				console.log(`Create ${key} response:`, res.data);
 
 				let newItem;
-				if (res.data?.data) {
-					newItem = res.data.data;
-				} else if (res.data?._id) {
+
+				// Try module-specific response keys first
+				const possibleKeys = responseDataKeys[key] || ["data"];
+
+				for (const responseKey of possibleKeys) {
+					if (res.data?.[responseKey]) {
+						newItem = res.data[responseKey];
+						break;
+					}
+				}
+
+				// Fallback to direct object if it has _id
+				if (!newItem && res.data?._id) {
 					newItem = res.data;
-				} else {
+				}
+
+				// Last resort - use response as-is
+				if (!newItem) {
 					console.warn(
 						`Unexpected API response structure for ${key}:`,
 						res.data
 					);
 					newItem = res.data;
 				}
+
 				if (!newItem?._id) {
 					console.error(`Created ${key} item missing _id:`, newItem);
+					console.error(`Full response:`, res.data);
+					console.error(`Tried keys:`, possibleKeys);
 					throw new Error(`Invalid response: missing _id field`);
 				}
 
 				addItem(key, newItem);
+				return newItem;
 			} catch (err) {
 				console.error(`Failed to create ${key}:`, err);
 				setError(`Failed to create ${key}`);
