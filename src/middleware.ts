@@ -18,7 +18,6 @@ export function middleware(request: NextRequest) {
 	return NextResponse.next();
 }
 
-// 👇 Add this to limit where the middleware runs
 export const config = {
 	matcher: ["/dashboard/:path*", "/profile/:path*"],
 };

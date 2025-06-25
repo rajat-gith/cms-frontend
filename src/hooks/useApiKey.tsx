@@ -2,141 +2,201 @@
 
 import { useState, useCallback } from "react";
 import { toast } from "sonner";
-import { ApiCredential, CopyState } from "@/types/index";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import Cookies from "js-cookie";
+import axios from "@/lib/axios";
+
 import {
-	copyToClipboard,
-	generateApiKeyPair,
-	validateApiKeyGeneration,
-	MAX_API_KEYS,
+    copyToClipboard,
+    validateApiKeyGeneration,
+    MAX_API_KEYS,
 } from "@/utils/apiKeyUtils";
 
+import { ApiCredential, CopyState } from "@/types/index";
+import { useUserStore } from "@/store/user.store";
+
 export function useApiKeys() {
-	const { userProfile, updateProfile, loading, error, fetchProfile } =
-		useUserProfile();
+    const {
+        userProfile,
+        setApiCredentials,
+        addApiCredential,
+        removeApiCredential,
+    } = useUserStore();
 
-	const [generating, setGenerating] = useState(false);
-	const [newSecret, setNewSecret] = useState<string | null>(null);
-	const [newId, setNewId] = useState<string | null>(null);
-	const [showSecret, setShowSecret] = useState(false);
-	const [copiedStates, setCopiedStates] = useState<CopyState>({});
+    const token = Cookies.get("token");
+    const [generating, setGenerating] = useState(false);
+    const [newSecret, setNewSecret] = useState<string | null>(null);
+    const [newId, setNewId] = useState<string | null>(null);
+    const [showSecret, setShowSecret] = useState(false);
+    const [copiedStates, setCopiedStates] = useState<CopyState>({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-	const credentials = userProfile?.apiCredentials || [];
-	const canGenerateMore = credentials.length < MAX_API_KEYS;
+    const credentials: ApiCredential[] = userProfile?.apiCredentials ?? [];
+    const canGenerateMore = credentials.length < MAX_API_KEYS;
 
-	const handleCopy = useCallback(
-		async (text: string, type: "key" | "secret", credId?: string) => {
-			try {
-				const copyId = await copyToClipboard(text, type, credId);
-				setCopiedStates((prev) => ({ ...prev, [copyId]: true }));
+    const fetchApiCredentials = useCallback(async () => {
+        setLoading(true);
+        setError(null);
 
-				setTimeout(() => {
-					setCopiedStates((prev) => ({ ...prev, [copyId]: false }));
-				}, 2000);
-			} catch (err) {
-				// Error already handled in copyToClipboard
-			}
-		},
-		[]
-	);
+        try {
+            const token = Cookies.get("token");
+            const res = await axios.get("/api-credentials", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-	const handleGenerateKey = useCallback(async () => {
-		if (!userProfile) {
-			toast.error("User profile not loaded. Please try again.");
-			return;
-		}
+            console.log("Fetched credentials:", res.data.credentials);
+            setApiCredentials(res.data.credentials);
+        } catch (err: any) {
+            console.error("Failed to fetch API credentials:", err);
+            setError("Failed to load API credentials.");
+        } finally {
+            setLoading(false);
+        }
+    }, [setApiCredentials]);
 
-		const currentCredentials = userProfile.apiCredentials || [];
-		if (!validateApiKeyGeneration(currentCredentials)) {
-			return;
-		}
+    const handleCopy = useCallback(
+        async (text: string, type: "key" | "secret", credId?: string) => {
+            try {
+                await navigator.clipboard.writeText(text);
+                const copyId = credId ? `${credId}-${type}` : type;
 
-		setGenerating(true);
-		setNewSecret(null);
-		setNewId(null);
-		setShowSecret(true);
+                setCopiedStates((prev) => ({ ...prev, [copyId]: true }));
 
-		try {
-			const { apiKey, rawSecret, hashedSecret } =
-				await generateApiKeyPair();
+                toast.success(
+                    `${type === "key" ? "API Key" : "Secret"} copied to clipboard!`
+                );
 
-			const newCredential: Omit<ApiCredential, "_id"> = {
-				apiKey,
-				apiSecret: hashedSecret,
-			};
+                setTimeout(() => {
+                    setCopiedStates((prev) => ({ ...prev, [copyId]: false }));
+                }, 2000);
+            } catch (err) {
+                console.error("Failed to copy to clipboard:", err);
+                toast.error("Failed to copy to clipboard");
+            }
+        },
+        []
+    );
 
-			// Create updated credentials array
-			const updatedCredentials = [...currentCredentials, newCredential];
+    const handleGenerateKey = useCallback(async () => {
+        if (!userProfile) {
+            toast.error("User not authenticated.");
+            return;
+        }
 
-			// Update the profile with new API credentials
-			await updateProfile({
-				apiCredentials: updatedCredentials as ApiCredential[],
-			});
+        if (!canGenerateMore) {
+            toast.error(`Maximum of ${MAX_API_KEYS} API keys allowed.`);
+            return;
+        }
 
-			// Refresh the profile to get the latest data with _id assigned by backend
-			await fetchProfile();
+        setGenerating(true);
+        setNewSecret(null);
+        setNewId(null);
+        setError(null);
 
-			// Set the new secret and ID for display
-			setNewSecret(rawSecret);
-			setNewId(apiKey);
+        try {
+            const res = await axios.post(
+                "/api-credentials",
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    validateStatus: () => true,
+                }
+            );
 
-			toast.success("New API key generated! Copy the secret now.");
-		} catch (err) {
-			console.error("Error generating API key:", err);
-			toast.error("Failed to generate API key. Please try again.");
-		} finally {
-			setGenerating(false);
-		}
-	}, [userProfile, updateProfile, fetchProfile]);
+            if (res.status !== 201 && res.status !== 200) {
+                throw new Error(res.data?.message || "Unknown error");
+            }
 
-	const handleDeleteKey = useCallback(
-		async (keyId: string) => {
-			if (!userProfile) return;
+            console.log("Generated API key response:", res.data);
 
-			try {
-				const updated =
-					userProfile.apiCredentials?.filter(
-						(cred) => cred._id !== keyId
-					) || [];
-				await updateProfile({ apiCredentials: updated });
+            const { _id, apiKey, rawSecret, credential } = res.data;
 
-				// Refresh the profile to get the latest data
-				await fetchProfile();
+            // Set the new secret and ID for showing the secret
+            setNewSecret(rawSecret);
+            setNewId(_id);
+            setShowSecret(true);
 
-				// Clear the new secret if we're deleting the newly created key
-				if (keyId === newId) {
-					setNewSecret(null);
-					setNewId(null);
-				}
+            // Add the new credential to the store
+            addApiCredential(credential);
 
-				toast.success("API key deleted successfully.");
-			} catch (err) {
-				console.error("Error deleting API key:", err);
-				toast.error("Failed to delete API key.");
-			}
-		},
-		[userProfile, updateProfile, fetchProfile, newId]
-	);
+            toast.success(
+                "API key generated successfully! Copy the secret now - it won't be shown again."
+            );
+        } catch (err: any) {
+            console.error("API key generation failed:", err);
+            const errorMessage =
+                err.response?.data?.message ||
+                err.message ||
+                "Failed to generate API key";
+            setError(errorMessage);
+            toast.error(errorMessage);
+        } finally {
+            setGenerating(false);
+        }
+    }, [userProfile, canGenerateMore, addApiCredential, token]);
 
-	const toggleSecret = useCallback(() => {
-		setShowSecret((prev) => !prev);
-	}, []);
+    const handleDeleteKey = useCallback(
+        async (keyId: string) => {
+            if (!userProfile) return;
 
-	return {
-		userProfile,
-		credentials,
-		loading,
-		error,
-		generating,
-		newSecret,
-		newId,
-		showSecret,
-		copiedStates,
-		canGenerateMore,
-		handleCopy,
-		handleGenerateKey,
-		handleDeleteKey,
-		toggleSecret,
-		fetchProfile,
-	};
+            try {
+                const res = await axios.delete(`/api-credentials/${keyId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (res.status === 200) {
+                    removeApiCredential(keyId);
+
+                    // Clear new key state if we're deleting the newly created key
+                    if (keyId === newId) {
+                        setNewSecret(null);
+                        setNewId(null);
+                        setShowSecret(false);
+                    }
+
+                    toast.success("API key deleted successfully.");
+                } else {
+                    throw new Error(
+                        res.data?.message || "Failed to delete API key"
+                    );
+                }
+            } catch (err: any) {
+                console.error("Delete failed:", err);
+                const errorMessage =
+                    err.response?.data?.message ||
+                    err.message ||
+                    "Failed to delete API key";
+                toast.error(errorMessage);
+            }
+        },
+        [userProfile, newId, removeApiCredential, token]
+    );
+
+    const toggleSecret = useCallback(() => {
+        setShowSecret((prev) => !prev);
+    }, []);
+
+    return {
+        userProfile,
+        credentials,
+        loading,
+        error,
+        canGenerateMore,
+        generating,
+        newSecret,
+        newId,
+        showSecret,
+        copiedStates,
+        handleCopy,
+        handleGenerateKey,
+        handleDeleteKey,
+        toggleSecret,
+        fetchApiCredentials,
+    };
 }

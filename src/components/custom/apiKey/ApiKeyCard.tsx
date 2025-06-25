@@ -1,158 +1,170 @@
 "use client";
 
+import { useState } from "react";
+import { Copy, Eye, EyeOff, Trash2, Key, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { KeyRound, Eye, EyeOff, Trash2, Copy, Check } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { ApiCredential, CopyState } from "@/types/index";
+import { formatApiKey, formatDate } from "@/utils/apiKeyUtils";
 
 interface ApiKeyCardProps {
-	credential: ApiCredential;
-	isNewKey: boolean;
-	newSecret?: string | null;
-	showSecret: boolean;
-	copiedStates: CopyState;
-	onToggleSecret: () => void;
-	onDelete: (keyId: string) => void;
-	onCopy: (text: string, type: "key" | "secret", credId?: string) => void;
+    credential: ApiCredential;
+    isNewKey: boolean;
+    newSecret: string | null;
+    showSecret: boolean;
+    copiedStates: CopyState;
+    onToggleSecret: () => void;
+    onDelete: (keyId: string) => void;
+    onCopy: (text: string, type: "key" | "secret", credId?: string) => void;
 }
 
 export function ApiKeyCard({
-	credential,
-	isNewKey,
-	newSecret,
-	showSecret,
-	copiedStates,
-	onToggleSecret,
-	onDelete,
-	onCopy,
+    credential,
+    isNewKey,
+    newSecret,
+    showSecret,
+    copiedStates,
+    onToggleSecret,
+    onDelete,
+    onCopy,
 }: ApiKeyCardProps) {
-	return (
-		<Card className="relative">
-			<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-				<CardTitle className="flex items-center gap-2 text-base font-medium">
-					<KeyRound className="w-4 h-4" />
-					API Key
-				</CardTitle>
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
 
-				<div className="flex items-center gap-2">
-					{isNewKey && newSecret && (
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={onToggleSecret}
-							className="cursor-pointer hover:bg-accent"
-							title={showSecret ? "Hide secret" : "Show secret"}
-						>
-							{showSecret ? (
-								<EyeOff className="w-4 h-4" />
-							) : (
-								<Eye className="w-4 h-4" />
-							)}
-						</Button>
-					)}
+    const handleDelete = () => {
+        if (showConfirmDelete) {
+            onDelete(credential._id);
+            setShowConfirmDelete(false);
+        } else {
+            setShowConfirmDelete(true);
+            // Auto-hide confirm after 3 seconds
+            setTimeout(() => setShowConfirmDelete(false), 3000);
+        }
+    };
 
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={() => onDelete(credential._id)}
-						className="cursor-pointer hover:bg-destructive/10 hover:text-destructive"
-						title="Delete API key"
-					>
-						<Trash2 className="w-4 h-4" />
-					</Button>
-				</div>
-			</CardHeader>
+    const copyKeyId = `${credential._id}-key`;
+    const copySecretId = `${credential._id}-secret`;
+    const isKeyCopied = copiedStates[copyKeyId];
+    const isSecretCopied = copiedStates[copySecretId];
 
-			<CardContent className="space-y-3">
-				{/* API Key */}
-				<div>
-					<label className="text-xs font-medium text-muted-foreground mb-1 block">
-						API Key
-					</label>
-					<div className="flex gap-2">
-						<Input
-							type="text"
-							value={credential.apiKey}
-							readOnly
-							className="font-mono text-sm"
-						/>
-						<Button
-							variant="outline"
-							size="icon"
-							onClick={() =>
-								onCopy(credential.apiKey, "key", credential._id)
-							}
-							className="cursor-pointer shrink-0"
-							title="Copy API key"
-						>
-							{copiedStates[`key-${credential._id}`] ? (
-								<Check className="w-4 h-4 text-green-600" />
-							) : (
-								<Copy className="w-4 h-4" />
-							)}
-						</Button>
-					</div>
-				</div>
+    return (
+        <Card
+            className={`${isNewKey ? "ring-2 ring-green-500 bg-green-50" : ""}`}
+        >
+            <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                        <Key className="w-5 h-5" />
+                        API Key
+                        {isNewKey && (
+                            <Badge
+                                variant="secondary"
+                                className="bg-green-100 text-green-800"
+                            >
+                                New
+                            </Badge>
+                        )}
+                    </CardTitle>
+                    <div className="flex items-center gap-2">
+                        <Badge
+                            variant={
+                                credential.isActive ? "default" : "secondary"
+                            }
+                        >
+                            {credential.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleDelete}
+                            className={`${
+                                showConfirmDelete
+                                    ? "bg-red-100 text-red-700 border-red-300"
+                                    : ""
+                            }`}
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            {showConfirmDelete ? "Confirm Delete" : "Delete"}
+                        </Button>
+                    </div>
+                </div>
+                {credential.createdAt && (
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        Created: {formatDate(credential.createdAt)}
+                    </div>
+                )}
+            </CardHeader>
 
-				{/* API Secret */}
-				<div>
-					<label className="text-xs font-medium text-muted-foreground mb-1 block">
-						API Secret
-					</label>
-					{isNewKey && newSecret ? (
-						<div className="space-y-2">
-							<div className="flex gap-2">
-								<Input
-									type={showSecret ? "text" : "password"}
-									value={newSecret}
-									readOnly
-									className="font-mono text-sm"
-								/>
-								<Button
-									variant="outline"
-									size="icon"
-									onClick={() =>
-										onCopy(
-											newSecret,
-											"secret",
-											credential._id
-										)
-									}
-									className="cursor-pointer shrink-0"
-									title="Copy secret"
-								>
-									{copiedStates[
-										`secret-${credential._id}`
-									] ? (
-										<Check className="w-4 h-4 text-green-600" />
-									) : (
-										<Copy className="w-4 h-4" />
-									)}
-								</Button>
-							</div>
-							<p className="text-xs text-green-600 font-medium">
-								⚠️ Important: Copy this secret now. It
-								won&apos;t be shown again.
-							</p>
-						</div>
-					) : (
-						<div className="space-y-2">
-							<Input
-								type="password"
-								value="••••••••••••••••••••••••••••••••"
-								readOnly
-								disabled
-								className="font-mono text-sm"
-							/>
-							<p className="text-xs text-muted-foreground">
-								Secret is securely stored as a hash and cannot
-								be retrieved.
-							</p>
-						</div>
-					)}
-				</div>
-			</CardContent>
-		</Card>
-	);
+            <CardContent className="space-y-4">
+                {/* API Key */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">API Key</label>
+                    <div className="flex items-center gap-2">
+                        <code className="flex-1 p-2 bg-gray-100 rounded text-sm font-mono">
+                            {formatApiKey(credential.apiKey)}
+                        </code>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                                onCopy(credential.apiKey, "key", credential._id)
+                            }
+                        >
+                            <Copy className="w-4 h-4" />
+                            {isKeyCopied ? "Copied!" : "Copy"}
+                        </Button>
+                    </div>
+                </div>
+
+                {/* API Secret - Only show for new keys */}
+                {isNewKey && newSecret && (
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-orange-700">
+                            API Secret (Save this now - it won't be shown
+                            again!)
+                        </label>
+                        <div className="flex items-center gap-2">
+                            <code className="flex-1 p-2 bg-orange-50 border border-orange-200 rounded text-sm font-mono">
+                                {showSecret ? newSecret : "•".repeat(32)}
+                            </code>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={onToggleSecret}
+                            >
+                                {showSecret ? (
+                                    <EyeOff className="w-4 h-4" />
+                                ) : (
+                                    <Eye className="w-4 h-4" />
+                                )}
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                    onCopy(newSecret, "secret", credential._id)
+                                }
+                            >
+                                <Copy className="w-4 h-4" />
+                                {isSecretCopied ? "Copied!" : "Copy"}
+                            </Button>
+                        </div>
+                        <p className="text-xs text-orange-600">
+                            ⚠️ This secret will only be displayed once. Make
+                            sure to copy and save it securely.
+                        </p>
+                    </div>
+                )}
+
+                {/* Warning for existing keys */}
+                {!isNewKey && (
+                    <div className="text-xs text-muted-foreground p-2 bg-gray-50 rounded">
+                        The API secret for this key is not displayed for
+                        security reasons.
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+    );
 }

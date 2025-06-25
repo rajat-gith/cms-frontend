@@ -10,6 +10,7 @@ import {
 	UserCheck,
 	Target,
 	FileText,
+	Cable
 } from "lucide-react";
 
 export const PROFILE_FORM_INITIAL_VALUES = {
@@ -30,6 +31,11 @@ export const SIDEBAR_MENU_ITEMS = [
 		label: "Getting Started",
 		icon: Home,
 		href: "/dashboard/generateApiKey",
+	},
+	{
+		label: "Integration",
+		icon: Cable,
+		href: "/dashboard/integration",
 	},
 	{
 		label: "Education",
