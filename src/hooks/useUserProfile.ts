@@ -19,7 +19,7 @@ export function useUserProfile() {
         try {
             const token = Cookies.get("token");
             const pathname = window.location.pathname;
-            const publicRoutes = ["/", "/auth/login", "/auth/register"];
+            const publicRoutes = ["/", "/auth/login", "/auth/signup"];
 
             if (!token) {
                 if (!publicRoutes.includes(pathname)) {
