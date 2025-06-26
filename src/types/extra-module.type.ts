@@ -57,11 +57,11 @@ export interface Extracurricular extends BaseExtraModule {
 }
 
 export type ExtraModuleType =
-    | "languages"
-    | "extracurriculars"
+    | "language"
+    | "extracurricular"
     | "volunteering"
-    | "interests"
-    | "awardsHonors";
+    | "interest"
+    | "awardsHonor";
 
 export type ExtraModuleData =
     | AwardHonor

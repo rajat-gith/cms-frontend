@@ -35,10 +35,10 @@ export type UserModules = {
     blogs: Blog[];
     certification: Certification[];
     experiences: Experience[];
-    awardsHonors: AwardHonor[];
-    extracurriculars: Extracurricular[];
-    interests: Interest[];
-    languages: Language[];
+    awardsHonor: AwardHonor[];
+    extracurricular: Extracurricular[];
+    interest: Interest[];
+    language: Language[];
     volunteering: Volunteering[];
     projects: Project[];
     socialProfiles: SocialProfile[];
@@ -128,10 +128,10 @@ export const useUserModuleStore = create<UserModuleStore>((set) => ({
         blogs: [],
         certification: [],
         experiences: [],
-        awardsHonors: [],
-        extracurriculars: [],
-        interests: [],
-        languages: [],
+        awardsHonor: [],
+        extracurricular: [],
+        interest: [],
+        language: [],
         volunteering: [],
         projects: [],
         socialProfiles: [],

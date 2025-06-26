@@ -3,7 +3,7 @@ import { Award, Heart, Languages, Users, Trophy } from "lucide-react";
 import type { ExtraModuleType } from "@/types/extra-module.type";
 
 export const extraModulesConfig = {
-    languages: {
+    language: {
         title: "Languages",
         description: "Manage your language skills and proficiency levels",
         icon: Languages,
@@ -25,7 +25,7 @@ export const extraModulesConfig = {
             { name: "certification", label: "Certification", type: "text" },
         ],
     },
-    extracurriculars: {
+    extracurricular: {
         title: "Extracurricular Activities",
         description: "Track your extracurricular activities and involvement",
         icon: Users,
@@ -76,7 +76,7 @@ export const extraModulesConfig = {
             { name: "website", label: "Organization Website", type: "url" },
         ],
     },
-    interests: {
+    interest: {
         title: "Interests & Hobbies",
         description: "Showcase your personal interests and hobbies",
         icon: Award,
@@ -93,7 +93,7 @@ export const extraModulesConfig = {
             { name: "icon", label: "Icon (optional)", type: "text" },
         ],
     },
-    awardsHonors: {
+    awardsHonor: {
         title: "Awards & Honors",
         description: "Display your achievements and recognitions",
         icon: Trophy,

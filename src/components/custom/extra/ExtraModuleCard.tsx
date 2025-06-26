@@ -245,15 +245,15 @@ export function ExtraModuleCard({
 
     const renderCardContent = () => {
         switch (type) {
-            case "languages":
+            case "language":
                 return renderLanguageCard(item as Language);
             case "volunteering":
                 return renderVolunteeringCard(item as Volunteering);
-            case "extracurriculars":
+            case "extracurricular":
                 return renderExtracurricularCard(item as Extracurricular);
-            case "interests":
+            case "interest":
                 return renderInterestCard(item as Interest);
-            case "awardsHonors":
+            case "awardsHonor":
                 return renderAwardHonorCard(item as AwardHonor);
             default:
                 return null;

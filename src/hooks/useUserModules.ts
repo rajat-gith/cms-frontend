@@ -20,20 +20,20 @@ const regularModuleToEndpoint: Record<string, string> = {
 
 // Extra modules that use the new /extra/:type endpoint
 const extraModules = [
-    "languages",
-    "extracurriculars",
+    "language",
+    "extracurricular",
     "volunteering",
-    "interests",
-    "awardsHonors",
+    "interest",
+    "awardsHonor",
 ] as const;
 
 // Map extra module keys to their backend type names
 const extraModuleToType: Record<string, string> = {
-    languages: "languages",
-    extracurriculars: "extracurriculars",
-    volunteering: "volunteerings",
-    interests: "interests",
-    awardsHonors: "award-honors",
+    language: "language",
+    extracurricular: "extracurricular",
+    volunteering: "volunteering",
+    interest: "interest",
+    awardsHonor: "award-honor",
 };
 
 // Helper function to determine if a module is an extra module
