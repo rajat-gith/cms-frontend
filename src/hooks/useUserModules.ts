@@ -139,7 +139,7 @@ export function useUserModules() {
                 }
 
                 addItem(key, newItem);
-                toast.success(`${key} item created successfully`);
+                // toast.success(`${key} item created successfully`);
                 return newItem;
             } catch (err) {
                 console.error(`Failed to create ${key}:`, err);

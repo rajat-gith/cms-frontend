@@ -11,7 +11,7 @@ interface PageProps {
     };
 }
 
-export default function ExtraModuleTypePage({ params }: PageProps) {
+export default async function ExtraModuleTypePage({ params }: PageProps) {
     const moduleType = params.type as ExtraModuleType;
 
     if (!extraModulesConfig[moduleType]) {
