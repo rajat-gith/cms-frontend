@@ -23,62 +23,62 @@ export default function IntegrationPage() {
         {
             entity: "education",
             description: "Get education data",
-            endpoint: "/api/public/education",
+            endpoint: "/public/education",
         },
         {
             entity: "experience",
             description: "Get experience data",
-            endpoint: "/api/public/experience",
+            endpoint: "/public/experience",
         },
         {
             entity: "skill",
             description: "Get skill data",
-            endpoint: "/api/public/skill",
+            endpoint: "/public/skill",
         },
         {
             entity: "project",
             description: "Get project data",
-            endpoint: "/api/public/project",
+            endpoint: "/public/project",
         },
         {
             entity: "certification",
             description: "Get certification data",
-            endpoint: "/api/public/certification",
+            endpoint: "/public/certification",
         },
         {
             entity: "blog",
             description: "Get blog data",
-            endpoint: "/api/public/blog",
+            endpoint: "/public/blog",
         },
         {
             entity: "socialProfile",
             description: "Get social profile data",
-            endpoint: "/api/public/socialProfile",
+            endpoint: "/public/socialProfile",
         },
         {
             entity: "award",
             description: "Get award & honor data",
-            endpoint: "/api/public/award",
+            endpoint: "/public/extra/award-honor",
         },
         {
             entity: "extracurricular",
             description: "Get extracurricular data",
-            endpoint: "/api/public/extracurricular",
+            endpoint: "/public/extra/extracurricular",
         },
         {
             entity: "language",
             description: "Get language data",
-            endpoint: "/api/public/language",
+            endpoint: "/public/extra/language",
         },
         {
             entity: "volunteering",
             description: "Get volunteering data",
-            endpoint: "/api/public/volunteering",
+            endpoint: "/public/extra/volunteering",
         },
         {
             entity: "interest",
             description: "Get interest data",
-            endpoint: "/api/public/interest",
+            endpoint: "/public/extra/interest",
         },
     ];
 
