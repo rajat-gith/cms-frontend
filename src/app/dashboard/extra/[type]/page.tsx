@@ -6,13 +6,14 @@ import type { ExtraModuleType } from "@/types/extra-module.type";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-    params: {
+    params: Promise<{
         type: string;
-    };
+    }>;
 }
 
 export default async function ExtraModuleTypePage({ params }: PageProps) {
-    const moduleType = params.type as ExtraModuleType;
+    const { type } = await params;
+    const moduleType = type as ExtraModuleType;
 
     if (!extraModulesConfig[moduleType]) {
         notFound();
