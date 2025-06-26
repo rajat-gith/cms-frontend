@@ -4,111 +4,48 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { SIDEBAR_MENU_ITEMS } from "@/utils/constants";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { useState } from "react";
 
-export default function Sidebar({ isCollapsed }: { isCollapsed: boolean }) {
-	const pathname = usePathname();
-	const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>(
-		{}
-	);
+interface SidebarProps {
+    isCollapsed: boolean;
+}
 
-	const toggleMenu = (label: string) => {
-		setExpandedMenus((prev) => ({
-			...prev,
-			[label]: !prev[label],
-		}));
-	};
+export default function Sidebar({ isCollapsed }: SidebarProps) {
+    const pathname = usePathname();
 
-	return (
-		<div
-			className={cn(
-				"h-full bg-muted text-muted-foreground py-6 transition-all duration-300 ease-in-out",
-				isCollapsed ? "px-2" : "px-4"
-			)}
-		>
-			<nav className="space-y-4">
-				{SIDEBAR_MENU_ITEMS.map(
-					({ label, icon: Icon, href, children }) => {
-						const isExpanded = expandedMenus[label];
-						const isActiveParent = pathname === href;
-						const hasChildren =
-							Array.isArray(children) && children.length > 0;
+    const isActivePath = (href: string) => {
+        return pathname === href;
+    };
 
-						return (
-							<div key={label}>
-								{hasChildren ? (
-									<button
-										onClick={() => toggleMenu(label)}
-										className={cn(
-											"w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer",
-											isActiveParent
-												? "bg-primary text-white"
-												: "hover:bg-accent hover:text-accent-foreground"
-										)}
-										type="button"
-									>
-										<span className="flex items-center gap-3">
-											<Icon className="w-5 h-5" />
-											{!isCollapsed && (
-												<span>{label}</span>
-											)}
-										</span>
-										{!isCollapsed &&
-											(isExpanded ? (
-												<ChevronDown className="w-4 h-4" />
-											) : (
-												<ChevronRight className="w-4 h-4" />
-											))}
-									</button>
-								) : (
-									<Link
-										href={href}
-										className={cn(
-											"flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-											isActiveParent
-												? "bg-primary text-white"
-												: "hover:bg-accent hover:text-accent-foreground"
-										)}
-									>
-										<Icon className="w-5 h-5" />
-										{!isCollapsed && <span>{label}</span>}
-									</Link>
-								)}
+    return (
+        <div
+            className={cn(
+                "h-full bg-muted text-muted-foreground py-6 transition-all duration-300 ease-in-out",
+                isCollapsed ? "px-2" : "px-4"
+            )}
+        >
+            <nav className="space-y-2">
+                {SIDEBAR_MENU_ITEMS.map(({ label, icon: Icon, href }) => {
+                    const isActive = href ? isActivePath(href) : false;
 
-								{/* Children menu */}
-								{hasChildren && isExpanded && !isCollapsed && (
-									<div className="ml-6 mt-1 flex flex-col space-y-1">
-										{children.map(
-											({
-												label: childLabel,
-												href: childHref,
-											}) => {
-												const isActiveChild =
-													pathname === childHref;
-												return (
-													<Link
-														key={childLabel}
-														href={childHref}
-														className={cn(
-															"px-3 py-1 rounded-md text-sm transition-colors",
-															isActiveChild
-																? "bg-primary text-white"
-																: "hover:bg-accent hover:text-accent-foreground"
-														)}
-													>
-														{childLabel}
-													</Link>
-												);
-											}
-										)}
-									</div>
-								)}
-							</div>
-						);
-					}
-				)}
-			</nav>
-		</div>
-	);
+                    return (
+                        <Link
+                            key={label}
+                            href={href || "#"}
+                            className={cn(
+                                "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                                isActive
+                                    ? "bg-primary text-white"
+                                    : "hover:bg-accent hover:text-accent-foreground"
+                            )}
+                        >
+                            <Icon className="w-5 h-5 flex-shrink-0" />
+                            {!isCollapsed && (
+                                <span className="truncate">{label}</span>
+                            )}
+                        </Link>
+                    );
+                })}
+            </nav>
+        </div>
+    );
 }

@@ -5,16 +5,19 @@ import {
     Blog,
     Certification,
     Experience,
-    AwardHonor,
-    Extracurricular,
-    Interest,
-    Language,
-    Volunteering,
     Project,
     SocialProfile,
     UserProfile,
     ApiCredential,
 } from "@/types";
+
+import {
+    AwardHonor,
+    Extracurricular,
+    Interest,
+    Language,
+    Volunteering,
+} from "@/types/extra-module.type";
 
 type UserStore = {
     userProfile: UserProfile | null;

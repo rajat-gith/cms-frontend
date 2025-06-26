@@ -45,7 +45,7 @@ export function SocialProfileCard({
             if (typeof value !== "object" || value === null) return false;
 
             if (key === "other") {
-                return value.platform && (value.url || value.username);
+                return value.url || value.username;
             }
             if (key === "email" || key === "phone") {
                 return !!value;

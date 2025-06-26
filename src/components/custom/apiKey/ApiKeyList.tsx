@@ -55,10 +55,7 @@ export function ApiKeyList({
             {credentials.map((cred) => {
                 // More robust key matching
                 const isNewKey = Boolean(
-                    newId &&
-                        (cred.apiKey === newId ||
-                            cred._id === newId ||
-                            cred.id === newId)
+                    newId && (cred.apiKey === newId || cred._id === newId)
                 );
 
                 // Show the secret only for the newly created key
@@ -75,7 +72,7 @@ export function ApiKeyList({
 
                 return (
                     <ApiKeyCard
-                        key={cred._id || cred.id || cred.apiKey}
+                        key={cred._id || cred.apiKey}
                         credential={cred}
                         isNewKey={isNewKey}
                         newSecret={secretToShow}

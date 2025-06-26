@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button"
+"use client";
 
-export default function HomePage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-white">
-      <Button>Click Me</Button>
-    </main>
-  )
+import { ExtraModuleDashboard } from "@/components/custom/extra/ExtraModuleDashboard";
+
+export default function ExtraModulesPage() {
+    return (
+        <div className="container mx-auto px-4 py-8">
+            <ExtraModuleDashboard />
+        </div>
+    );
 }
