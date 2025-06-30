@@ -77,6 +77,7 @@ export function useAuth() {
 			console.error("Google login failed", err);
 		},
 		flow: "auth-code",
+		redirect_uri:process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI
 	});
 
 	return {
