@@ -253,7 +253,7 @@ export function ExtraModuleCard({
                 return renderExtracurricularCard(item as Extracurricular);
             case "interest":
                 return renderInterestCard(item as Interest);
-            case "awardsHonor":
+            case "award-honor":
                 return renderAwardHonorCard(item as AwardHonor);
             default:
                 return null;

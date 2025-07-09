@@ -61,7 +61,7 @@ export type ExtraModuleType =
     | "extracurricular"
     | "volunteering"
     | "interest"
-    | "awardsHonor";
+    | "award-honor";
 
 export type ExtraModuleData =
     | AwardHonor

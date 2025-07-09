@@ -19,7 +19,7 @@ import {
 	Edit,
 	Trash2,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 import type { CertificationCardProps } from "@/types/index";
 
 export const CertificationCard: React.FC<CertificationCardProps> = ({
@@ -32,8 +32,13 @@ export const CertificationCard: React.FC<CertificationCardProps> = ({
 		(certification.expirationDate &&
 			new Date(certification.expirationDate) < new Date());
 
-	const formatDate = (dateString: string) => {
-		return format(new Date(dateString), "MMM yyyy");
+	const formatDate = (dateString?: string | null) => {
+		if (!dateString) return "N/A";
+
+		const parsedDate = new Date(dateString);
+		if (!isValid(parsedDate)) return "N/A";
+
+		return format(parsedDate, "MMM yyyy");
 	};
 
 	return (

@@ -24,7 +24,7 @@ const extraModules = [
 	"extracurricular",
 	"volunteering",
 	"interest",
-	"awardsHonor",
+	"award-honor",
 ] as const;
 
 // Map extra module keys to their backend type names
@@ -33,7 +33,7 @@ const extraModuleToType: Record<string, string> = {
 	extracurricular: "extracurricular",
 	volunteering: "volunteering",
 	interest: "interest",
-	awardsHonor: "award-honor",
+	"award-honor": "award-honor",
 };
 
 // Helper function to determine if a module is an extra module

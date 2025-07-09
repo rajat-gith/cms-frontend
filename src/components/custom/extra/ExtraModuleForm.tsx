@@ -219,7 +219,7 @@ export function ExtraModuleForm({
                         return proficiencyLevels.map((p) => p.value);
                     if (field.name === "category" && type === "interest")
                         return interestCategories;
-                    if (field.name === "category" && type === "awardsHonor")
+                    if (field.name === "category" && type === "award-honor")
                         return awardCategories;
                     return [];
                 };

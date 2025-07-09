@@ -1,160 +1,160 @@
 import { create } from "zustand";
 import {
-    Skill,
-    Education,
-    Blog,
-    Certification,
-    Experience,
-    Project,
-    SocialProfile,
-    UserProfile,
-    ApiCredential,
+	Skill,
+	Education,
+	Blog,
+	Certification,
+	Experience,
+	Project,
+	SocialProfile,
+	UserProfile,
+	ApiCredential,
 } from "@/types";
 
 import {
-    AwardHonor,
-    Extracurricular,
-    Interest,
-    Language,
-    Volunteering,
+	AwardHonor,
+	Extracurricular,
+	Interest,
+	Language,
+	Volunteering,
 } from "@/types/extra-module.type";
 
 type UserStore = {
-    userProfile: UserProfile | null;
-    isAuthenticated: boolean;
-    setUserProfile: (user: Partial<UserProfile>) => void;
-    clearUserProfile: () => void;
-    setIsAuthenticated: (status: boolean) => void;
-    setApiCredentials: (creds: ApiCredential[]) => void;
-    addApiCredential: (cred: ApiCredential) => void;
-    removeApiCredential: (id: string) => void;
+	userProfile: UserProfile | null;
+	isAuthenticated: boolean;
+	setUserProfile: (user: Partial<UserProfile>) => void;
+	clearUserProfile: () => void;
+	setIsAuthenticated: (status: boolean) => void;
+	setApiCredentials: (creds: ApiCredential[]) => void;
+	addApiCredential: (cred: ApiCredential) => void;
+	removeApiCredential: (id: string) => void;
 };
 export type UserModules = {
-    skills: Skill[];
-    education: Education[];
-    blogs: Blog[];
-    certification: Certification[];
-    experiences: Experience[];
-    awardsHonor: AwardHonor[];
-    extracurricular: Extracurricular[];
-    interest: Interest[];
-    language: Language[];
-    volunteering: Volunteering[];
-    projects: Project[];
-    socialProfiles: SocialProfile[];
+	skills: Skill[];
+	education: Education[];
+	blogs: Blog[];
+	certification: Certification[];
+	experiences: Experience[];
+	"award-honor": AwardHonor[];
+	extracurricular: Extracurricular[];
+	interest: Interest[];
+	language: Language[];
+	volunteering: Volunteering[];
+	projects: Project[];
+	socialProfiles: SocialProfile[];
 };
 
 type UserModuleStore = {
-    modules: UserModules;
-    setModule: <T extends keyof UserModules>(
-        key: T,
-        data: UserModules[T]
-    ) => void;
-    addItem: <T extends keyof UserModules>(
-        key: T,
-        item: UserModules[T][number]
-    ) => void;
-    removeItem: <T extends keyof UserModules>(key: T, id: string) => void;
+	modules: UserModules;
+	setModule: <T extends keyof UserModules>(
+		key: T,
+		data: UserModules[T]
+	) => void;
+	addItem: <T extends keyof UserModules>(
+		key: T,
+		item: UserModules[T][number]
+	) => void;
+	removeItem: <T extends keyof UserModules>(key: T, id: string) => void;
 };
 
 export const useUserStore = create<UserStore>((set) => ({
-    userProfile: null,
-    isAuthenticated: false,
+	userProfile: null,
+	isAuthenticated: false,
 
-    setUserProfile: (user) =>
-        set((state) => {
-            const apiCredentials = Array.isArray(user.apiCredentials)
-                ? user.apiCredentials
-                : [];
+	setUserProfile: (user) =>
+		set((state) => {
+			const apiCredentials = Array.isArray(user.apiCredentials)
+				? user.apiCredentials
+				: [];
 
-            const updatedProfile = {
-                ...(state.userProfile ?? {}),
-                ...user,
-                location: {
-                    ...(state.userProfile?.location ?? {}),
-                    ...(user.location ?? {}),
-                },
-                apiCredentials,
-            };
+			const updatedProfile = {
+				...(state.userProfile ?? {}),
+				...user,
+				location: {
+					...(state.userProfile?.location ?? {}),
+					...(user.location ?? {}),
+				},
+				apiCredentials,
+			};
 
-            return {
-                userProfile: updatedProfile as UserProfile,
-                isAuthenticated: true,
-            };
-        }),
+			return {
+				userProfile: updatedProfile as UserProfile,
+				isAuthenticated: true,
+			};
+		}),
 
-    clearUserProfile: () =>
-        set({
-            userProfile: null,
-            isAuthenticated: false,
-        }),
+	clearUserProfile: () =>
+		set({
+			userProfile: null,
+			isAuthenticated: false,
+		}),
 
-    setIsAuthenticated: (status) => set({ isAuthenticated: status }),
+	setIsAuthenticated: (status) => set({ isAuthenticated: status }),
 
-    setApiCredentials: (creds: ApiCredential[]) =>
-        set((state) => ({
-            userProfile: {
-                ...(state.userProfile ?? {}),
-                apiCredentials: creds,
-            } as UserProfile,
-        })),
+	setApiCredentials: (creds: ApiCredential[]) =>
+		set((state) => ({
+			userProfile: {
+				...(state.userProfile ?? {}),
+				apiCredentials: creds,
+			} as UserProfile,
+		})),
 
-    addApiCredential: (cred: ApiCredential) =>
-        set((state) => ({
-            userProfile: {
-                ...(state.userProfile ?? {}),
-                apiCredentials: [
-                    ...(state.userProfile?.apiCredentials ?? []),
-                    cred,
-                ],
-            } as UserProfile,
-        })),
+	addApiCredential: (cred: ApiCredential) =>
+		set((state) => ({
+			userProfile: {
+				...(state.userProfile ?? {}),
+				apiCredentials: [
+					...(state.userProfile?.apiCredentials ?? []),
+					cred,
+				],
+			} as UserProfile,
+		})),
 
-    removeApiCredential: (credId: string) =>
-        set((state) => ({
-            userProfile: {
-                ...(state.userProfile ?? {}),
-                apiCredentials: (
-                    state.userProfile?.apiCredentials ?? []
-                ).filter((c) => c._id !== credId),
-            } as UserProfile,
-        })),
+	removeApiCredential: (credId: string) =>
+		set((state) => ({
+			userProfile: {
+				...(state.userProfile ?? {}),
+				apiCredentials: (
+					state.userProfile?.apiCredentials ?? []
+				).filter((c) => c._id !== credId),
+			} as UserProfile,
+		})),
 }));
 
 export const useUserModuleStore = create<UserModuleStore>((set) => ({
-    modules: {
-        skills: [],
-        education: [],
-        blogs: [],
-        certification: [],
-        experiences: [],
-        awardsHonor: [],
-        extracurricular: [],
-        interest: [],
-        language: [],
-        volunteering: [],
-        projects: [],
-        socialProfiles: [],
-    },
-    setModule: (key, data) =>
-        set((state) => ({
-            modules: {
-                ...state.modules,
-                [key]: data,
-            },
-        })),
-    addItem: (key, item) =>
-        set((state) => ({
-            modules: {
-                ...state.modules,
-                [key]: [...state.modules[key], item],
-            },
-        })),
-    removeItem: (key, id) =>
-        set((state) => ({
-            modules: {
-                ...state.modules,
-                [key]: state.modules[key].filter((item) => item._id !== id),
-            },
-        })),
+	modules: {
+		skills: [],
+		education: [],
+		blogs: [],
+		certification: [],
+		experiences: [],
+		"award-honor": [],
+		extracurricular: [],
+		interest: [],
+		language: [],
+		volunteering: [],
+		projects: [],
+		socialProfiles: [],
+	},
+	setModule: (key, data) =>
+		set((state) => ({
+			modules: {
+				...state.modules,
+				[key]: data,
+			},
+		})),
+	addItem: (key, item) =>
+		set((state) => ({
+			modules: {
+				...state.modules,
+				[key]: [...state.modules[key], item],
+			},
+		})),
+	removeItem: (key, id) =>
+		set((state) => ({
+			modules: {
+				...state.modules,
+				[key]: state.modules[key].filter((item) => item._id !== id),
+			},
+		})),
 }));
