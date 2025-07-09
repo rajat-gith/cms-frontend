@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -28,7 +28,37 @@ import { useUserModuleStore } from "@/store/user.store";
 import { toast } from "sonner";
 import Tiptap from "@/components/custom/blog/TipTap";
 
-export default function BlogFormPage() {
+// Loading component for suspense fallback
+function BlogFormSkeleton() {
+	return (
+		<div className="container mx-auto p-4 sm:p-6 max-w-4xl">
+			<div className="flex items-center justify-between mb-8">
+				<div className="flex items-center gap-4">
+					<div className="w-24 h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+					<div>
+						<div className="w-48 h-8 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2"></div>
+						<div className="w-32 h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+					</div>
+				</div>
+			</div>
+			<Card>
+				<CardHeader>
+					<div className="w-24 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+				</CardHeader>
+				<CardContent>
+					<div className="space-y-8">
+						<div className="w-full h-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+						<div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+						<div className="w-full h-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+					</div>
+				</CardContent>
+			</Card>
+		</div>
+	);
+}
+
+// Main form component that uses useSearchParams
+function BlogFormContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const blogId = searchParams.get("id");
@@ -379,7 +409,9 @@ export default function BlogFormPage() {
 								<Button
 									type="button"
 									variant="outline"
-									onClick={() => router.push("/dashboard/blog")}
+									onClick={() =>
+										router.push("/dashboard/blog")
+									}
 								>
 									Cancel
 								</Button>
@@ -413,5 +445,14 @@ export default function BlogFormPage() {
 				</CardContent>
 			</Card>
 		</div>
+	);
+}
+
+// Main component that wraps the form content in Suspense
+export default function BlogFormPage() {
+	return (
+		<Suspense fallback={<BlogFormSkeleton />}>
+			<BlogFormContent />
+		</Suspense>
 	);
 }
