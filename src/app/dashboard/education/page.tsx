@@ -28,6 +28,9 @@ export default function EducationPage() {
 		fetchModule("education");
 	}, [fetchModule]);
 
+
+	console.log("Modules:", modules.education);
+
 	const handleCreate = async (data: Omit<Education, "_id">) => {
 		try {
 			await createModuleItem("education", data);

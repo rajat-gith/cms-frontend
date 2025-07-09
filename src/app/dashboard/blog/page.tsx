@@ -13,7 +13,6 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { BlogCard } from "@/components/custom/blog/blogCard";
-import { BlogForm } from "@/components/custom/blog/blogForm";
 import { useUserModuleStore } from "@/store/user.store";
 import { useUserModules } from "@/hooks/useUserModules";
 import { useBlogForm } from "@/hooks/useBlogForm";
@@ -23,16 +22,7 @@ import type { Blog } from "@/types";
 export default function BlogsPage() {
 	const { modules } = useUserModuleStore();
 	const { fetchModule, loading } = useUserModules();
-	const {
-		isDialogOpen,
-		editingBlog,
-		loading: formLoading,
-		openCreateDialog,
-		openEditDialog,
-		closeDialog,
-		handleSubmit,
-		handleDelete,
-	} = useBlogForm();
+	const { openCreateDialog, openEditDialog, handleDelete } = useBlogForm();
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const [statusFilter, setStatusFilter] = useState<
@@ -191,7 +181,10 @@ export default function BlogsPage() {
 							your first blog post. You can save drafts and
 							publish them when you're ready.
 						</p>
-						<Button onClick={openCreateDialog}>
+						<Button
+							className="cursor-pointer"
+							onClick={openCreateDialog}
+						>
 							<Plus className="h-4 w-4 mr-2" />
 							Create Your First Blog Post
 						</Button>
@@ -237,15 +230,6 @@ export default function BlogsPage() {
 					))}
 				</div>
 			)}
-
-			{/* Blog Form Dialog */}
-			<BlogForm
-				isOpen={isDialogOpen}
-				onClose={closeDialog}
-				onSubmit={handleSubmit}
-				blog={editingBlog}
-				loading={formLoading}
-			/>
 		</div>
 	);
 }

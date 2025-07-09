@@ -26,7 +26,7 @@ import type { Blog } from "@/types";
 import { useUserModules } from "@/hooks/useUserModules";
 import { useUserModuleStore } from "@/store/user.store";
 import { toast } from "sonner";
-import Tiptap from "./TipTap";
+import Tiptap from "@/components/custom/blog/TipTap";
 
 export default function BlogFormPage() {
 	const router = useRouter();

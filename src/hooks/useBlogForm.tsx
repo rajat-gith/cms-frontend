@@ -1,51 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useUserModules } from "./useUserModules";
 import type { Blog } from "@/types";
-import type { BlogFormData } from "@/types/blog-form";
 
 export function useBlogForm() {
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
-	const { createModuleItem, updateModuleItem, deleteModuleItem, loading } =
-		useUserModules();
+	const router = useRouter();
+	const { deleteModuleItem, updateModuleItem, loading } = useUserModules();
 
 	const openCreateDialog = () => {
-		setEditingBlog(null);
-		setIsDialogOpen(true);
+		router.push("/dashboard/blog/form");
 	};
 
 	const openEditDialog = (blog: Blog) => {
-		setEditingBlog(blog);
-		setIsDialogOpen(true);
-	};
-
-	const closeDialog = () => {
-		setIsDialogOpen(false);
-		setEditingBlog(null);
-	};
-
-	const handleSubmit = async (data: BlogFormData) => {
-		try {
-			console.log("here")
-			if (editingBlog) {
-				await updateModuleItem("blogs", editingBlog._id, data);
-				toast.success("Blog post updated successfully!");
-			} else {
-				await createModuleItem("blogs", data);
-				toast.success("Blog post created successfully!");
-			}
-			closeDialog();
-		} catch (error) {
-			console.error("Blog form error:", error);
-			toast.error(
-				editingBlog
-					? "Failed to update blog post"
-					: "Failed to create blog post"
-			);
-		}
+		router.push(`/dashboard/blog/form?id=${blog._id}`);
 	};
 
 	const handleDelete = async (id: string) => {
@@ -81,13 +50,9 @@ export function useBlogForm() {
 	};
 
 	return {
-		isDialogOpen,
-		editingBlog,
 		loading,
 		openCreateDialog,
 		openEditDialog,
-		closeDialog,
-		handleSubmit,
 		handleDelete,
 		handleTogglePublish,
 	};

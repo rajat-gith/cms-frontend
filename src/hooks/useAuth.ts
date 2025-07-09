@@ -58,6 +58,7 @@ export function useAuth() {
 	};
 
 	const handleGoogleSuccess = async (authResult: any) => {
+		console.log(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI)
 		if (authResult?.code) {
 			try {
 				const response = await axios.post("/auth/google", {
@@ -69,6 +70,7 @@ export function useAuth() {
 				console.error("Google auth error", err);
 			}
 		}
+
 	};
 
 	const googleSignup = useGoogleLogin({
@@ -77,7 +79,6 @@ export function useAuth() {
 			console.error("Google login failed", err);
 		},
 		flow: "auth-code",
-		redirect_uri:process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI
 	});
 
 	return {
