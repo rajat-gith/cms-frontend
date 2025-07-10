@@ -50,15 +50,45 @@ export function useAuth() {
 				email,
 				password,
 			});
-			const token = response.data.token;
-			await postLogin(token);
+
+			// Check if response contains token (direct registration) or requires OTP
+			if (response.data.token) {
+				const token = response.data.token;
+				await postLogin(token);
+			} else {
+				// OTP was sent, don't redirect yet
+				return response.data;
+			}
 		} catch (error) {
 			throw new Error("Signup failed");
 		}
 	};
 
+	const verifyOTP = async (email: string, otp: string) => {
+		try {
+			const response = await axios.post("/auth/verify-otp", {
+				email,
+				otp,
+			});
+			const token = response.data.token;
+			await postLogin(token);
+		} catch (error) {
+			throw new Error("OTP verification failed");
+		}
+	};
+
+	const resendOTP = async (email: string) => {
+		try {
+			await axios.post("/auth/resend-otp", {
+				email,
+			});
+		} catch (error) {
+			throw new Error("Failed to resend OTP");
+		}
+	};
+
 	const handleGoogleSuccess = async (authResult: any) => {
-		console.log(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI)
+		console.log(process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI);
 		if (authResult?.code) {
 			try {
 				const response = await axios.post("/auth/google", {
@@ -70,7 +100,6 @@ export function useAuth() {
 				console.error("Google auth error", err);
 			}
 		}
-
 	};
 
 	const googleSignup = useGoogleLogin({
@@ -84,6 +113,8 @@ export function useAuth() {
 	return {
 		login,
 		signup,
+		verifyOTP,
+		resendOTP,
 		googleSignup,
 		googleLogin: googleSignup,
 	};
