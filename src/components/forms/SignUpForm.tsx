@@ -3,121 +3,179 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { validateSignup } from "@/utils/validations";
+import { signupSchema } from "@/utils/validations";
+import { z } from "zod";
+import { Loader2 } from "lucide-react";
 
-type SignupFormData = {
-    email: string;
-    password: string;
-};
+// Infer the shape of the signup form data from the schema
+type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function SignupForm() {
-    const { signup, googleSignup } = useAuth();
-    const router = useRouter();
-    const [form, setForm] = useState<SignupFormData>({
-        email: "",
-        password: "",
-    });
-    const [loading, setLoading] = useState<boolean>(false);
+	const { signup, googleSignup } = useAuth();
+	const router = useRouter();
+	const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+	const [loading, setLoading] = useState<boolean>(false);
+	const [errors, setErrors] = useState<
+		Partial<Record<keyof SignupFormData, string>>
+	>({});
 
-    const handleGoogleSignup = () => {
-        if (loading) return;
-        googleSignup();
-    };
+	const handleSignup = async () => {
+		const result = signupSchema.safeParse({ email, password });
 
-    const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const error = validateSignup(form.email, form.password);
-        if (error) {
-            toast.error(error);
-            return;
-        }
+		if (!result.success) {
+			const fieldErrors: Partial<Record<keyof SignupFormData, string>> =
+				{};
+			result.error.errors.forEach((err) => {
+				const field = err.path[0] as keyof SignupFormData;
+				fieldErrors[field] = err.message;
+			});
+			setErrors(fieldErrors);
+			toast.error("Please fix the errors and try again.");
+			return;
+		}
 
-        setLoading(true);
-        try {
-            await signup(form);
-            toast.success("Account created successfully!");
-            router.push("/dashboard");
-        } catch (err) {
-            console.error(err);
-            toast.error("Signup failed. Try again.");
-        } finally {
-            setLoading(false);
-        }
-    };
+		setErrors({});
+		setLoading(true);
+		try {
+			await signup({ email, password });
+			toast.success("Account created successfully!");
+			router.push("/dashboard");
+		} catch (err) {
+			console.error(err);
+			toast.error("Signup failed. Please try again.");
+		} finally {
+			setLoading(false);
+		}
+	};
 
-    return (
-        <div className="w-full max-w-sm bg-white p-6 rounded-xl shadow-md space-y-6">
-            <h2 className="text-2xl font-bold text-center text-gray-800">
-                Create an Account
-            </h2>
+	const handleGoogleSignup = async () => {
+		if (loading) return;
+		setLoading(true);
+		try {
+			await googleSignup();
+			// likely redirects, so no cleanup needed here if redirect happens
+		} catch (err) {
+			console.error(err);
+			toast.error("Google signup failed. Please try again.");
+			setLoading(false);
+		}
+	};
 
-            <form onSubmit={handleSignup} className="space-y-4">
-                <Input
-                    placeholder="Email"
-                    type="email"
-                    value={form.email}
-                    disabled={loading}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setForm({ ...form, email: e.target.value })
-                    }
-                    required
-                    className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-indigo-300"
-                />
+	return (
+		<div className="relative w-full max-w-sm bg-white p-6 rounded-xl shadow-md space-y-6">
+			{/* Overlay when loading */}
+			{loading && (
+				<div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded-xl z-10">
+					<Loader2 className="w-6 h-6 animate-spin text-indigo-600" />
+				</div>
+			)}
 
-                <Input
-                    placeholder="Password"
-                    type="password"
-                    value={form.password}
-                    disabled={loading}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setForm({ ...form, password: e.target.value })
-                    }
-                    required
-                    className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-indigo-300"
-                />
+			<h2 className="text-2xl font-bold text-center text-gray-800">
+				Create an Account
+			</h2>
 
-                <Button
-                    type="submit"
-                    className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 cursor-pointer"
-                    disabled={loading}
-                >
-                    {loading ? "Signing up..." : "Sign Up"}
-                </Button>
-            </form>
+			<div className="space-y-4">
+				{/* Email Field */}
+				<div>
+					<Label htmlFor="email" className="text-sm text-gray-600">
+						Email
+					</Label>
+					<Input
+						id="email"
+						type="email"
+						placeholder="you@example.com"
+						value={email}
+						disabled={loading}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setEmail(e.target.value)
+						}
+						className="mt-1 w-full px-3 py-2 border rounded-md focus:ring focus:ring-indigo-300"
+					/>
+					{errors.email && (
+						<p className="text-sm text-red-500 mt-1">
+							{errors.email}
+						</p>
+					)}
+				</div>
 
-            <div className="relative my-4">
-                <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                    <span className="bg-white px-2 text-gray-500">
-                        Or continue with
-                    </span>
-                </div>
-            </div>
+				{/* Password Field */}
+				<div>
+					<Label htmlFor="password" className="text-sm text-gray-600">
+						Password
+					</Label>
+					<Input
+						id="password"
+						type="password"
+						placeholder="********"
+						value={password}
+						disabled={loading}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setPassword(e.target.value)
+						}
+						className={`mt-1 w-full px-3 py-2 border rounded-md focus:ring ${
+							password.length === 0
+								? "border-gray-300"
+								: errors.password
+									? "border-red-500 focus:ring-red-300"
+									: "border-green-500 focus:ring-green-300"
+						}`}
+					/>
+					{errors.password && (
+						<p className="text-sm text-red-500 mt-1">
+							{errors.password}
+						</p>
+					)}
+				</div>
 
-            <Button
-                className="w-full flex items-center justify-center gap-2 border py-2 rounded-md text-gray-100 hover:bg-gray-100 hover:text-black cursor-pointer"
-                onClick={handleGoogleSignup}
-                disabled={loading}
-            >
-                <FcGoogle className="text-xl" />
-                Sign Up with Google
-            </Button>
+				{/* Sign Up Button */}
+				<Button
+					className="w-full bg-indigo-600 text-white py-2 cursor-pointer rounded-md hover:bg-indigo-700 disabled:opacity-50"
+					onClick={handleSignup}
+					disabled={loading}
+				>
+					{loading ? "Signing up..." : "Sign Up"}
+				</Button>
 
-            <p className="text-center text-sm text-gray-500">
-                Already have an account?{" "}
-                <span
-                    className="text-indigo-600 hover:underline cursor-pointer"
-                    onClick={() => router.push("/auth/login")}
-                >
-                    Log in
-                </span>
-            </p>
-        </div>
-    );
+				{/* Divider */}
+				<div className="relative my-4">
+					<div className="absolute inset-0 flex items-center">
+						<div className="w-full border-t" />
+					</div>
+					<div className="relative flex justify-center text-sm">
+						<span className="bg-white px-2 text-gray-500">
+							Or continue with
+						</span>
+					</div>
+				</div>
+
+				{/* Google Button */}
+				<Button
+					className="w-full flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+					onClick={handleGoogleSignup}
+					disabled={loading}
+					variant="outline"
+				>
+					<FcGoogle className="text-xl" />
+					Sign up with Google
+				</Button>
+
+				{/* Login Link */}
+				<p className="text-center text-sm text-gray-500">
+					Already have an account?{" "}
+					<span
+						className="text-indigo-600 hover:underline cursor-pointer"
+						onClick={() => !loading && router.push("/auth/login")}
+					>
+						Log in
+					</span>
+				</p>
+			</div>
+		</div>
+	);
 }
