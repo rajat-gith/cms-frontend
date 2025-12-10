@@ -203,23 +203,34 @@ export function useProjects() {
   const searchProjects = useCallback(
     (query: string) => {
       if (!query.trim()) return projects;
-
+  
       const lowercaseQuery = query.toLowerCase();
-      return projects.filter(
-        (project) =>
+  
+      return projects.filter((project) => {
+        const technologies = Array.isArray(project.technologies)
+          ? project.technologies
+          : [];
+  
+        const achievements = Array.isArray(project.achievements)
+          ? project.achievements
+          : [];
+  
+        return (
           project.title.toLowerCase().includes(lowercaseQuery) ||
           (project.description?.toLowerCase() ?? "").includes(lowercaseQuery) ||
-          project.technologies.some((tech) =>
+          technologies.some((tech) =>
             tech.toLowerCase().includes(lowercaseQuery)
           ) ||
           (project.role?.toLowerCase() ?? "").includes(lowercaseQuery) ||
-          project.achievements.some((achievement) =>
+          achievements.some((achievement) =>
             achievement.toLowerCase().includes(lowercaseQuery)
           )
-      );
+        );
+      });
     },
     [projects]
   );
+  
 
   const getProjectById = useCallback(
     (id: string) => {
