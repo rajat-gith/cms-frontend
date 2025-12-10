@@ -20,13 +20,42 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
 
   const getDuration = () => {
     const start = formatDate(project.duration.startDate);
-    const end = project.duration.isOngoing 
-      ? "Present" 
-      : project.duration.endDate 
-        ? formatDate(project.duration.endDate)
-        : "Present";
+    const end = project.duration.isOngoing
+      ? "Present"
+      : project.duration.endDate
+      ? formatDate(project.duration.endDate)
+      : "Present";
     return `${start} - ${end}`;
   };
+
+  // ✅ SAFE NORMALIZERS (prevents all crashes)
+  const achievements =
+    Array.isArray(project.achievements)
+      ? project.achievements
+      : typeof project.achievements === "string"
+      ? (() => {
+          try {
+            const parsed = JSON.parse(project.achievements);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
+        })()
+      : [];
+
+  const otherLinks =
+    Array.isArray(project.otherLinks)
+      ? project.otherLinks
+      : typeof project.otherLinks === "string"
+      ? (() => {
+          try {
+            const parsed = JSON.parse(project.otherLinks);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
+        })()
+      : [];
 
   return (
     <div className="bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow">
@@ -61,19 +90,23 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
 
         {/* Project Type and Team Size */}
         <div className="flex items-center gap-4 mb-3">
-          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-            project.projectType === "individual" 
-              ? "bg-green-100 text-green-800" 
-              : "bg-purple-100 text-purple-800"
-          }`}>
+          <span
+            className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+              project.projectType === "individual"
+                ? "bg-green-100 text-green-800"
+                : "bg-purple-100 text-purple-800"
+            }`}
+          >
             {project.projectType === "individual" ? "Individual" : "Group"}
           </span>
+
           {project.teamSize && project.teamSize > 1 && (
             <span className="inline-flex items-center gap-1 text-sm text-gray-600">
               <Users size={14} />
               {project.teamSize} members
             </span>
           )}
+
           <span className="inline-flex items-center gap-1 text-sm text-gray-600">
             <Calendar size={14} />
             {getDuration()}
@@ -88,7 +121,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
         )}
 
         {/* Technologies */}
-        {project.technologies.length > 0 && (
+        {project.technologies?.length > 0 && (
           <div className="mb-4">
             <div className="flex flex-wrap gap-1">
               {project.technologies.slice(0, 5).map((tech) => (
@@ -108,23 +141,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
           </div>
         )}
 
-        {/* Achievements */}
-        {project.achievements.length > 0 && (
+        {/* ✅ FIXED Achievements */}
+        {achievements.length > 0 && (
           <div className="mb-4">
             <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-1">
               <Award size={14} />
               Key Achievements
             </h4>
             <ul className="space-y-1">
-              {project.achievements.slice(0, 3).map((achievement, index) => (
-                <li key={index} className="text-sm text-gray-600 flex items-start gap-2">
+              {achievements.slice(0, 3).map((achievement, index) => (
+                <li
+                  key={index}
+                  className="text-sm text-gray-600 flex items-start gap-2"
+                >
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
                   {achievement}
                 </li>
               ))}
-              {project.achievements.length > 3 && (
+
+              {achievements.length > 3 && (
                 <li className="text-sm text-gray-500">
-                  +{project.achievements.length - 3} more achievements
+                  +{achievements.length - 3} more achievements
                 </li>
               )}
             </ul>
@@ -132,7 +169,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
         )}
 
         {/* Team Members */}
-        {project.projectType === "group" && project.teamMembers.length > 0 && (
+        {project.projectType === "group" && project.teamMembers?.length > 0 && (
           <div className="mb-4">
             <h4 className="text-sm font-medium text-gray-900 mb-2">Team Members</h4>
             <div className="flex flex-wrap gap-2">
@@ -168,6 +205,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
               Code
             </a>
           )}
+
           {project.liveDemoLink && (
             <a
               href={project.liveDemoLink}
@@ -179,9 +217,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
               Live Demo
             </a>
           )}
-          {project.otherLinks && (
+
+          {otherLinks.length > 0 && (
             <a
-              href={project.otherLinks}
+              href={otherLinks[0]}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900 transition-colors"
@@ -191,6 +230,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
             </a>
           )}
         </div>
+
         <div className="text-xs text-gray-500">
           Updated {new Date(project.updatedAt).toLocaleDateString()}
         </div>
