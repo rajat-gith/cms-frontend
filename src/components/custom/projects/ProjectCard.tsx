@@ -141,7 +141,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
           </div>
         )}
 
-        {/* ✅ FIXED Achievements */}
+        {/* Achievements */}
         {achievements.length > 0 && (
           <div className="mb-4">
             <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-1">
