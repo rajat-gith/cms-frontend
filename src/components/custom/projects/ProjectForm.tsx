@@ -28,6 +28,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 		otherLinks: "",
 		repositoryLink: "",
 		liveDemoLink: "",
+		// ✅ achievements as array
 		achievements: [],
 		duration: {
 			startDate: new Date(),
@@ -52,7 +53,21 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 				otherLinks: project.otherLinks || "",
 				repositoryLink: project.repositoryLink || "",
 				liveDemoLink: project.liveDemoLink || "",
-				achievements: project.achievements,
+				// ✅ Normalize achievements to array (handles "[]" string or [] array)
+				achievements: Array.isArray(project.achievements)
+					? project.achievements
+					: project.achievements
+					? (() => {
+							try {
+								const parsed = JSON.parse(
+									project.achievements as unknown as string
+								);
+								return Array.isArray(parsed) ? parsed : [];
+							} catch {
+								return [];
+							}
+					  })()
+					: [],
 				duration: {
 					startDate: new Date(project.duration.startDate),
 					endDate: project.duration.endDate
@@ -94,7 +109,10 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 		if (newAchievement.trim()) {
 			setFormData({
 				...formData,
-				achievements: [...formData.achievements, newAchievement.trim()],
+				achievements: [
+					...(formData.achievements || []),
+					newAchievement.trim(),
+				],
 			});
 			setNewAchievement("");
 		}
@@ -103,7 +121,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 	const removeAchievement = (index: number) => {
 		setFormData({
 			...formData,
-			achievements: formData.achievements.filter((_, i) => i !== index),
+			achievements: (formData.achievements || []).filter(
+				(_, i) => i !== index
+			),
 		});
 	};
 
@@ -367,11 +387,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 								<input
 									type="date"
 									required
-									value={
-										formData.duration.startDate
-											.toISOString()
-											.split("T")[0]
-									}
+									value={formData.duration.startDate
+										.toISOString()
+										.split("T")[0]}
 									onChange={(e) =>
 										setFormData({
 											...formData,
@@ -462,23 +480,27 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 							</button>
 						</div>
 						<div className="space-y-2">
-							{formData.achievements.map((achievement, index) => (
-								<div
-									key={index}
-									className="flex items-center gap-2 p-2 bg-green-50 rounded-md"
-								>
-									<span className="flex-1 text-sm">
-										{achievement}
-									</span>
-									<button
-										type="button"
-										onClick={() => removeAchievement(index)}
-										className="p-1 hover:bg-green-200 rounded"
+							{(formData.achievements || []).map(
+								(achievement, index) => (
+									<div
+										key={index}
+										className="flex items-center gap-2 p-2 bg-green-50 rounded-md"
 									>
-										<Trash2 size={16} />
-									</button>
-								</div>
-							))}
+										<span className="flex-1 text-sm">
+											{achievement}
+										</span>
+										<button
+											type="button"
+											onClick={() =>
+												removeAchievement(index)
+											}
+											className="p-1 hover:bg-green-200 rounded"
+										>
+											<Trash2 size={16} />
+										</button>
+									</div>
+								)
+							)}
 						</div>
 					</div>
 
