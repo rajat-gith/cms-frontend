@@ -81,7 +81,6 @@ export function SkillForm({ isOpen, onClose, skill, mode }: SkillFormProps) {
 		}
 	}, [isOpen, skill, mode]);
 
-	console.log(skill);
 
 	const validateForm = (): boolean => {
 		const newErrors: Record<string, string> = {};

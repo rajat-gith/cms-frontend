@@ -81,7 +81,6 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log(formData);
 		await onSubmit(formData);
 	};
 

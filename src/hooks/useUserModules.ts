@@ -67,8 +67,6 @@ export function useUserModules() {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 
-				console.log(`Fetch ${key} response:`, res.data);
-
 				// Attempt to extract data array safely
 				let moduleData = res.data?.data ?? res.data?.[key] ?? res.data;
 
@@ -102,8 +100,6 @@ export function useUserModules() {
 				const res = await axios.post(`/${endpoint}`, data, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
-
-				console.log(`Create ${key} response:`, res.data);
 
 				let newItem;
 
@@ -178,8 +174,6 @@ export function useUserModules() {
 					headers: { Authorization: `Bearer ${token}` },
 				});
 
-				console.log(`Update ${key} response:`, res.data);
-
 				// Refresh the module data after update
 				await fetchModule(key);
 				toast.success(`${key} item updated successfully`);
@@ -205,9 +199,6 @@ export function useUserModules() {
 				const res = await axios.delete(`/${endpoint}/${id}`, {
 					headers: { Authorization: `Bearer ${token}` },
 				});
-
-				console.log(`Delete ${key} response:`, res.data);
-
 				removeItem(key, id);
 				toast.success(`${key} item deleted successfully`);
 			} catch (err) {

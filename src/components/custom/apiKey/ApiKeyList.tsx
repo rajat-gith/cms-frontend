@@ -25,19 +25,7 @@ export function ApiKeyList({
     onDelete,
     onCopy,
 }: ApiKeyListProps) {
-    // Debug logging
-    console.log("ApiKeyList render:", {
-        credentialsCount: credentials?.length || 0,
-        newId,
-        newSecret: !!newSecret,
-        showSecret,
-        credentials: credentials?.map((c) => ({
-            id: c._id,
-            apiKey: c.apiKey,
-            isActive: c.isActive,
-        })),
-    });
-
+    
     // Show empty state
     if (!credentials || credentials.length === 0) {
         return (
@@ -60,15 +48,6 @@ export function ApiKeyList({
 
                 // Show the secret only for the newly created key
                 const secretToShow = isNewKey && showSecret ? newSecret : null;
-
-                // Debug logging for each credential
-                console.log("Rendering credential:", {
-                    credId: cred._id,
-                    credApiKey: cred.apiKey,
-                    newId,
-                    isNewKey,
-                    secretToShow: !!secretToShow,
-                });
 
                 return (
                     <ApiKeyCard

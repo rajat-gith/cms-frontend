@@ -46,7 +46,6 @@ export function useApiKeys() {
                 },
             });
 
-            console.log("Fetched credentials:", res.data.credentials);
             setApiCredentials(res.data.credentials);
         } catch (err: any) {
             console.error("Failed to fetch API credentials:", err);
@@ -110,8 +109,6 @@ export function useApiKeys() {
             if (res.status !== 201 && res.status !== 200) {
                 throw new Error(res.data?.message || "Unknown error");
             }
-
-            console.log("Generated API key response:", res.data);
 
             const { _id, apiKey, rawSecret, credential } = res.data;
 

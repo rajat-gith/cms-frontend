@@ -13,7 +13,6 @@ import { Education } from "@/types";
 
 export default function EducationPage() {
 	const { modules } = useUserModuleStore();
-	console.log(modules.education);
 	const {
 		fetchModule,
 		createModuleItem,
@@ -29,7 +28,6 @@ export default function EducationPage() {
 	}, [fetchModule]);
 
 
-	console.log("Modules:", modules.education);
 
 	const handleCreate = async (data: Omit<Education, "_id">) => {
 		try {

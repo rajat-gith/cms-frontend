@@ -233,6 +233,7 @@ export function ExtraModuleForm({
                             )}
                         </Label>
                         <Select
+                            key={fieldValue}
                             value={fieldValue}
                             onValueChange={(value) =>
                                 handleInputChange(field.name, value)

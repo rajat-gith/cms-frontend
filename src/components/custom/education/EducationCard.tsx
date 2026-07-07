@@ -17,7 +17,6 @@ export function EducationCard({
 	onEdit,
 	onDelete,
 }: EducationCardProps) {
-	console.log(education);
 	const formatDate = (dateString: string) => {
 		if (!dateString) return "";
 		const date = new Date(dateString);

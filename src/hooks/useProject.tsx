@@ -64,7 +64,6 @@ export function useProjects() {
       setLoading(true);
       setError(null);
       try {
-        console.log(id);
         await updateModuleItem("projects", id, data);
         setProjects((prev) =>
           prev.map((project) =>
