@@ -4,10 +4,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/custom/Navbar";
 import { UserProvider } from "@/providers/UserProvider";
+import { Open_Sans } from "next/font/google";
 
 import "./globals.css";
-
-import { Open_Sans } from "next/font/google";
 
 const openSans = Open_Sans({
     subsets: ["latin"],
@@ -21,7 +20,10 @@ export const metadata: Metadata = {
 };
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-if (!CLIENT_ID) throw new Error("Google Client ID is not defined");
+
+if (!CLIENT_ID) {
+    throw new Error("Google Client ID is not defined");
+}
 
 export default function RootLayout({
     children,
@@ -31,13 +33,17 @@ export default function RootLayout({
     return (
         <GoogleOAuthProvider clientId={CLIENT_ID!}>
             <html lang="en" className={openSans.className}>
-                <body className="h-screen flex flex-col overflow-hidden">
+                <body className="h-screen overflow-hidden">
                     <Navbar />
+
                     <UserProvider>
-                        <div className="flex-1 overflow-auto">
-                            <main className="min-h-full p-4">{children}</main>
+                        <div className="h-full overflow-auto pt-16">
+                            <main className="min-h-full p-4">
+                                {children}
+                            </main>
                         </div>
                     </UserProvider>
+
                     <Toaster richColors />
                 </body>
             </html>
