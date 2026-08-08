@@ -136,7 +136,7 @@ export function ExtraModuleList({ type }: ExtraModuleListProps) {
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                     <h1 className="text-2xl font-bold">{config.title}</h1>
                     <p className="text-muted-foreground">
@@ -145,7 +145,7 @@ export function ExtraModuleList({ type }: ExtraModuleListProps) {
                 </div>
                 <Button
                     onClick={() => setShowForm(true)}
-                    className="flex items-center gap-2"
+                    className="flex items-center justify-center gap-2 w-full sm:w-auto"
                 >
                     <Plus className="h-4 w-4" />
                     Add {config.title}
@@ -173,7 +173,7 @@ export function ExtraModuleList({ type }: ExtraModuleListProps) {
                             value={filterCategory}
                             onValueChange={setFilterCategory}
                         >
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-full sm:w-[180px]">
                                 <SelectValue placeholder="Filter by category" />
                             </SelectTrigger>
                             <SelectContent>
@@ -217,7 +217,7 @@ export function ExtraModuleList({ type }: ExtraModuleListProps) {
 
             {/* Results Count */}
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary">
                         {filteredData.length}{" "}
                         {filteredData.length === 1 ? "item" : "items"}

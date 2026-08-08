@@ -89,7 +89,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
         </div>
 
         {/* Project Type and Team Size */}
-        <div className="flex items-center gap-4 mb-3">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-3">
           <span
             className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
               project.projectType === "individual"
@@ -192,8 +192,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
       </div>
 
       {/* Footer with Links */}
-      <div className="px-6 py-4 bg-gray-50 border-t flex justify-between items-center">
-        <div className="flex gap-3">
+      <div className="px-6 py-4 bg-gray-50 border-t flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+        <div className="flex flex-wrap gap-3">
           {project.repositoryLink && (
             <a
               href={project.repositoryLink}

@@ -72,7 +72,7 @@ const ProjectFiltersComponent: React.FC<ProjectFiltersProps> = ({
   return (
     <div className="bg-white rounded-lg border shadow-sm p-4 mb-6">
       {/* Search Bar */}
-      <div className="flex gap-4 items-center mb-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:items-center mb-4">
         <div className="flex-1 relative">
           <Search
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -86,37 +86,39 @@ const ProjectFiltersComponent: React.FC<ProjectFiltersProps> = ({
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 px-4 py-2 border rounded-md transition-colors ${
-            showFilters || hasActiveFilters
-              ? "bg-blue-50 border-blue-300 text-blue-700"
-              : "border-gray-300 hover:bg-gray-50"
-          }`}
-        >
-          <Filter size={16} />
-          Filters
-          {hasActiveFilters && (
-            <span className="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5 ml-1">
-              {
-                [
-                  filters.search && "search",
-                  filters.projectType && "type",
-                  filters.technologies.length > 0 && "tech",
-                  (filters.dateRange.start || filters.dateRange.end) && "date",
-                ].filter(Boolean).length
-              }
-            </span>
-          )}
-        </button>
-        {hasActiveFilters && (
+        <div className="flex gap-2">
           <button
-            onClick={clearAllFilters}
-            className="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md"
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 border rounded-md transition-colors ${
+              showFilters || hasActiveFilters
+                ? "bg-blue-50 border-blue-300 text-blue-700"
+                : "border-gray-300 hover:bg-gray-50"
+            }`}
           >
-            Clear All
+            <Filter size={16} />
+            Filters
+            {hasActiveFilters && (
+              <span className="bg-blue-600 text-white text-xs rounded-full px-2 py-0.5 ml-1">
+                {
+                  [
+                    filters.search && "search",
+                    filters.projectType && "type",
+                    filters.technologies.length > 0 && "tech",
+                    (filters.dateRange.start || filters.dateRange.end) && "date",
+                  ].filter(Boolean).length
+                }
+              </span>
+            )}
           </button>
-        )}
+          {hasActiveFilters && (
+            <button
+              onClick={clearAllFilters}
+              className="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-md whitespace-nowrap"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Advanced Filters */}

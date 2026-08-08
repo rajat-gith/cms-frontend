@@ -20,10 +20,9 @@ export function ExperienceCard({
 }: ExperienceCardProps) {
 	const formatDate = (dateString: string) => {
 		try {
-			// Handle both MongoDB date format and regular date strings
 			const date = new Date(dateString);
 			if (isNaN(date.getTime())) {
-				return dateString; // Return original if can't parse
+				return dateString;
 			}
 			return format(date, "MMM yyyy");
 		} catch {
@@ -44,45 +43,50 @@ export function ExperienceCard({
 
 	return (
 		<Card className="group hover:shadow-md transition-shadow duration-200">
-			<CardHeader className="pb-3">
-				<div className="flex items-start justify-between gap-4">
-					<div className="flex-1">
-						<h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+			<CardHeader className="pb-3 relative">
+				{/* Add padding-right so text doesn't overlap with icons */}
+				<div className="flex items-start justify-between gap-4 pr-16">
+					<div className="flex-1 min-w-0">
+						<h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 break-words">
 							{experience.title}
 						</h3>
-						<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 mt-1">
-							<Building className="h-4 w-4" />
-							<span className="font-medium">
+
+						<div className="flex items-start gap-2 text-gray-600 dark:text-gray-400 mt-1">
+							<Building className="h-4 w-4 flex-shrink-0 mt-0.5" />
+							<span className="font-medium break-words">
 								{experience.company}
 							</span>
 						</div>
+
 						{experience.location && (
-							<div className="flex items-center gap-2 text-gray-500 dark:text-gray-500 mt-1">
-								<MapPin className="h-4 w-4" />
-								<span className="text-sm">
+							<div className="flex items-start gap-2 text-gray-500 dark:text-gray-500 mt-1">
+								<MapPin className="h-4 w-4 flex-shrink-0 mt-0.5" />
+								<span className="text-sm break-words">
 									{experience.location}
 								</span>
 							</div>
 						)}
 					</div>
-					<div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => onEdit(experience)}
-							className="h-8 w-8 p-0"
-						>
-							<Edit className="h-4 w-4" />
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => onDelete(experience._id)}
-							className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-						>
-							<Trash2 className="h-4 w-4" />
-						</Button>
-					</div>
+				</div>
+
+				{/* Absolute positioned icons */}
+				<div className="absolute top-3 right-3 flex gap-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => onEdit(experience)}
+						className="h-8 w-8 p-0"
+					>
+						<Edit className="h-4 w-4" />
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => onDelete(experience._id)}
+						className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+					>
+						<Trash2 className="h-4 w-4" />
+					</Button>
 				</div>
 			</CardHeader>
 
@@ -93,13 +97,13 @@ export function ExperienceCard({
 							{experience.employmentType}
 						</Badge>
 						<div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-500">
-							<Calendar className="h-3 w-3" />
+							<Calendar className="h-3 w-3 flex-shrink-0" />
 							<span>{getPeriodString()}</span>
 						</div>
 					</div>
 
 					{experience.description && (
-						<p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3">
+						<p className="text-sm text-gray-700 dark:text-gray-300 break-words line-clamp-3">
 							{experience.description}
 						</p>
 					)}

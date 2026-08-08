@@ -25,23 +25,23 @@ export function EducationCard({
 
 	return (
 		<div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-			<div className="flex justify-between items-start mb-4">
-				<div className="flex items-start gap-3">
+			<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
+				<div className="flex items-start gap-3 min-w-0">
 					<GraduationCap className="h-6 w-6 text-blue-600 mt-1 flex-shrink-0" />
-					<div>
-						<h3 className="text-xl font-semibold">
+					<div className="min-w-0">
+						<h3 className="text-xl font-semibold break-words">
 							{education.courseName}
 						</h3>
 						<p className="text-lg text-gray-700">
 							{education.degree}
 						</p>
 						<div className="flex items-center gap-2 text-gray-600 mt-1">
-							<BookOpen className="h-4 w-4" />
-							<span>{education.institute}</span>
+							<BookOpen className="h-4 w-4 flex-shrink-0" />
+							<span className="break-words">{education.institute}</span>
 						</div>
 					</div>
 				</div>
-				<div className="flex gap-2">
+				<div className="flex gap-2 self-end sm:self-auto flex-shrink-0">
 					<Button
 						className="cursor-pointer"
 						variant="ghost"

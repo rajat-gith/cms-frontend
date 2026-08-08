@@ -47,15 +47,15 @@ export function PublicUrlsList({
                             className="p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
                             onClick={() => onSelect(url.endpoint)}
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex-1">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div className="flex-1 min-w-0">
                                     <h4 className="font-medium capitalize">
                                         {url.entity}
                                     </h4>
                                     <p className="text-sm text-muted-foreground mb-2">
                                         {url.description}
                                     </p>
-                                    <code className="text-xs bg-muted px-2 py-1 rounded">
+                                    <code className="block sm:inline text-xs bg-muted px-2 py-1 rounded break-all">
                                         {url.endpoint}
                                     </code>
                                     <p className="text-xs text-muted-foreground mt-1">
@@ -63,7 +63,7 @@ export function PublicUrlsList({
                                         headers
                                     </p>
                                 </div>
-                                <div className="flex gap-2 ml-4">
+                                <div className="flex gap-2 sm:ml-4">
                                     <Button
                                         variant="outline"
                                         size="sm"

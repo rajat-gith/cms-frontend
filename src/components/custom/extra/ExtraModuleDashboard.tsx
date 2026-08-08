@@ -89,12 +89,16 @@ export function ExtraModuleDashboard() {
 									<p className="text-sm text-muted-foreground line-clamp-2">
 										{config.description}
 									</p>
+									// Responsive Manage Button
 									<Button
 										variant="ghost"
 										className="w-full mt-3 justify-start p-0 h-auto text-sm font-medium"
 									>
-										Manage {config.title} →
+										<span className="truncate sm:whitespace-normal">
+											Manage {config.title} →
+										</span>
 									</Button>
+
 								</div>
 							</CardContent>
 						</Card>

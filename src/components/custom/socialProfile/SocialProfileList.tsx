@@ -221,7 +221,7 @@ export function SocialProfileList() {
             <Card>
                 <CardContent className="p-4">
                     <div className="flex flex-col sm:flex-row gap-4">
-                        <div className="relative flex-1">
+                        <div className="relative flex-1 min-w-0">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                             <Input
                                 placeholder="Search profiles by platform or username..."
@@ -230,34 +230,31 @@ export function SocialProfileList() {
                                 className="pl-10"
                             />
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap sm:flex-nowrap">
                             <Button
-                                variant={
-                                    filter === "all" ? "default" : "outline"
-                                }
+                                variant={filter === "all" ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setFilter("all")}
+                                className="flex-1 sm:flex-none whitespace-nowrap"
                             >
                                 All
                             </Button>
                             <Button
-                                variant={
-                                    filter === "public" ? "default" : "outline"
-                                }
+                                variant={filter === "public" ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setFilter("public")}
+                                className="flex-1 sm:flex-none whitespace-nowrap"
                             >
-                                <Eye className="h-4 w-4 mr-1" />
+                                <Eye className="h-4 w-4 mr-1 flex-shrink-0" />
                                 Public
                             </Button>
                             <Button
-                                variant={
-                                    filter === "private" ? "default" : "outline"
-                                }
+                                variant={filter === "private" ? "default" : "outline"}
                                 size="sm"
                                 onClick={() => setFilter("private")}
+                                className="flex-1 sm:flex-none whitespace-nowrap"
                             >
-                                <EyeOff className="h-4 w-4 mr-1" />
+                                <EyeOff className="h-4 w-4 mr-1 flex-shrink-0" />
                                 Private
                             </Button>
                         </div>

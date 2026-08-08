@@ -106,8 +106,8 @@ export const CertificationCard: React.FC<CertificationCardProps> = ({
 			<CardContent className="pt-0">
 				<div className="space-y-3">
 					{/* Status and Dates */}
-					<div className="flex items-center justify-between">
-						<div className="flex items-center space-x-4 text-sm text-gray-600">
+					<div className="flex flex-wrap items-center justify-between gap-2">
+						<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
 							<div className="flex items-center">
 								<Calendar className="h-4 w-4 mr-1" />
 								<span>
@@ -175,9 +175,9 @@ export const CertificationCard: React.FC<CertificationCardProps> = ({
 					)}
 
 					{/* Credential Info */}
-					<div className="flex items-center justify-between pt-2 border-t border-gray-100">
+					<div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100">
 						{certification.credentialId && (
-							<div className="text-xs text-gray-500">
+							<div className="text-xs text-gray-500 break-all">
 								ID: {certification.credentialId}
 							</div>
 						)}

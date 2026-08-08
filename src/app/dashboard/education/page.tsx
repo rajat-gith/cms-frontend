@@ -71,14 +71,14 @@ export default function EducationPage() {
 
 	return (
 		<div className="max-w-4xl mx-auto p-4 md:p-6 space-y-6">
-			<div className="flex justify-between items-center">
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
 				<h2 className="text-2xl font-semibold">Your Education</h2>
 				<Button
 					onClick={() => {
 						setEditingId(null);
 						setIsAddingNew(true);
 					}}
-					className="cursor-pointer"
+					className="cursor-pointer w-full sm:w-auto"
 					disabled={isAddingNew || Boolean(editingId)}
 				>
 					<Plus className="h-4 w-4 mr-2" />

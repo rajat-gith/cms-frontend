@@ -160,9 +160,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
 			<div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-				<div className="p-6 border-b">
+				<div className="p-4 sm:p-6 border-b">
 					<div className="flex justify-between items-center">
-						<h2 className="text-xl font-semibold">
+						<h2 className="text-lg sm:text-xl font-semibold">
 							{project ? "Edit Project" : "Create New Project"}
 						</h2>
 						<button
@@ -174,7 +174,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 					</div>
 				</div>
 
-				<form onSubmit={handleSubmit} className="p-6 space-y-6">
+				<form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
 					{/* Basic Information */}
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 						<div>
@@ -586,18 +586,18 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 					)}
 
 					{/* Form Actions */}
-					<div className="flex justify-end gap-4 pt-6 border-t">
+					<div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-4 pt-6 border-t">
 						<button
 							type="button"
 							onClick={onCancel}
-							className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+							className="px-6 py-2 border border-gray-300 rounded-md hover:bg-gray-50 w-full sm:w-auto"
 						>
 							Cancel
 						</button>
 						<button
 							type="submit"
 							disabled={isLoading}
-							className={`px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 ${
+							className={`px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 w-full sm:w-auto ${
 								isLoading ? "opacity-50 cursor-not-allowed" : ""
 							}`}
 						>

@@ -119,29 +119,29 @@ const ProjectsPage: React.FC = () => {
 	};
 
 	return (
-		<div className="max-w-7xl mx-auto p-6">
+		<div className="max-w-7xl mx-auto p-4 sm:p-6">
 			{/* Header */}
 			<div className="mb-8">
-				<div className="flex justify-between items-start mb-4">
+				<div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-900">
+						<h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
 							Projects
 						</h1>
 						<p className="text-gray-600 mt-2">
 							Manage and showcase your projects
 						</p>
 					</div>
-					<div className="flex gap-3">
+					<div className="flex flex-col sm:flex-row gap-3">
 						<button
 							onClick={exportProjects}
-							className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+							className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
 						>
 							<Download size={16} />
 							Export
 						</button>
 						<button
 							onClick={() => setShowForm(true)}
-							className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+							className="flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
 						>
 							<Plus size={16} />
 							Add Project
@@ -150,7 +150,7 @@ const ProjectsPage: React.FC = () => {
 				</div>
 
 				{/* Stats */}
-				<div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
 					<div className="bg-white p-4 rounded-lg border">
 						<div className="text-2xl font-bold text-blue-600">
 							{projects.length}

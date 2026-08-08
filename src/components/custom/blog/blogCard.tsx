@@ -48,9 +48,10 @@ export function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
 				</div>
 			)}
 
-			<CardHeader className="pb-3">
-				<div className="flex items-start justify-between gap-4">
-					<div className="flex-1">
+			<CardHeader className="pb-3 relative">
+				{/* Add padding-right so text doesn't overlap with icons */}
+				<div className="flex items-start justify-between gap-4 pr-16">
+					<div className="flex-1 min-w-0">
 						<div className="flex items-center gap-2 mb-2">
 							<Badge
 								variant={
@@ -72,47 +73,48 @@ export function BlogCard({ blog, onEdit, onDelete }: BlogCardProps) {
 							</Badge>
 						</div>
 
-						<h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2">
+						<h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2 break-words">
 							{blog.title}
 						</h3>
 
-						<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm mb-2">
+						<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm mb-2 break-words">
 							<User className="h-4 w-4" />
 							<span>By {blog.author.name}</span>
 						</div>
 
 						{blog.isPublished && blog.publishedAt && (
-							<div className="flex items-center gap-2 text-gray-500 dark:text-gray-500 text-sm">
+							<div className="flex items-center gap-2 text-gray-500 dark:text-gray-500 text-sm break-words">
 								<Calendar className="h-4 w-4" />
 								<span>{formatDate(blog.publishedAt)}</span>
 							</div>
 						)}
 					</div>
+				</div>
 
-					<div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => onEdit(blog)}
-							className="h-8 w-8 p-0"
-						>
-							<Edit className="h-4 w-4" />
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => onDelete(blog._id)}
-							className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
-						>
-							<Trash2 className="h-4 w-4" />
-						</Button>
-					</div>
+				{/* Absolute positioned icons */}
+				<div className="absolute top-3 right-3 flex gap-2">
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => onEdit(blog)}
+						className="h-8 w-8 p-0"
+					>
+						<Edit className="h-4 w-4" />
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => onDelete(blog._id)}
+						className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+					>
+						<Trash2 className="h-4 w-4" />
+					</Button>
 				</div>
 			</CardHeader>
 
 			<CardContent className="pt-0">
 				<div className="space-y-3">
-					<p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3">
+					<p className="text-sm text-gray-700 dark:text-gray-300 break-words line-clamp-3">
 						{truncateContent(blog.content)}
 					</p>
 

@@ -46,8 +46,8 @@ export function ExtraModuleCard({
         const end = period.isOngoing
             ? "Present"
             : period.endDate
-              ? formatDate(period.endDate)
-              : "Present";
+                ? formatDate(period.endDate)
+                : "Present";
         return `${start} - ${end}`;
     };
 

@@ -202,13 +202,13 @@ function BlogFormContent() {
 	return (
 		<div className="container mx-auto p-4 sm:p-6 max-w-4xl">
 			{/* Header */}
-			<div className="flex items-center justify-between mb-8">
-				<div className="flex items-center gap-4">
+			<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+				<div className="flex items-start gap-3 sm:items-center sm:gap-4">
 					<Button
 						variant="ghost"
 						size="sm"
 						onClick={() => router.push("/dashboard/blog")}
-						className="flex items-center gap-2"
+						className="flex items-center gap-2 self-start"
 					>
 						<ArrowLeft className="h-4 w-4" />
 						Back to Blogs
@@ -415,7 +415,7 @@ function BlogFormContent() {
 									Cancel
 								</Button>
 
-								<div className="flex gap-3">
+								<div className="flex flex-wrap gap-3">
 									<Button
 										type="button"
 										variant="outline"

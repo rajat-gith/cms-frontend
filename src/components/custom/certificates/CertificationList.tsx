@@ -173,7 +173,7 @@ export const CertificationList: React.FC<CertificationListProps> = ({
 						<Award className="h-6 w-6 mr-2" />
 						Certifications
 					</h2>
-					<div className="flex items-center gap-4 mt-2">
+					<div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2">
 						<Badge variant="outline" className="text-sm">
 							{stats.total} Total
 						</Badge>
@@ -223,14 +223,14 @@ export const CertificationList: React.FC<CertificationListProps> = ({
 							/>
 						</div>
 
-						<div className="flex gap-2">
+						<div className="flex flex-col sm:flex-row gap-2">
 							<Select
 								value={sortBy}
 								onValueChange={(value: SortOption) =>
 									setSortBy(value)
 								}
 							>
-								<SelectTrigger className="w-40">
+								<SelectTrigger className="w-full sm:w-40">
 									<Calendar className="h-4 w-4 mr-2" />
 									<SelectValue />
 								</SelectTrigger>
@@ -254,7 +254,7 @@ export const CertificationList: React.FC<CertificationListProps> = ({
 									setFilterBy(value)
 								}
 							>
-								<SelectTrigger className="w-40">
+								<SelectTrigger className="w-full sm:w-40">
 									<Filter className="h-4 w-4 mr-2" />
 									<SelectValue />
 								</SelectTrigger>

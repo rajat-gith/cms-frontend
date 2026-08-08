@@ -79,14 +79,15 @@ export function SkillCard({ skill, onEdit }: SkillCardProps) {
 	return (
 		<>
 			<Card className="group hover:shadow-md transition-shadow duration-200 border-l-4 border-l-blue-500">
-				<CardHeader className="pb-3">
-					<div className="flex items-start justify-between">
-						<div className="flex-1">
-							<h3 className="font-semibold text-lg text-gray-900 mb-2">
+				<CardHeader className="pb-3 relative">
+					{/* Add padding-right so text doesn't overlap with menu */}
+					<div className="flex items-start justify-between pr-12">
+						<div className="flex-1 min-w-0">
+							<h3 className="font-semibold text-lg text-gray-900 mb-2 break-words">
 								{skill.name}
 							</h3>
 
-							<div className="flex items-center gap-2 mb-3">
+							<div className="flex flex-wrap items-center gap-2 mb-3">
 								<Badge
 									className={`${getLevelBadgeColor(skill.level)} border-none`}
 								>
@@ -96,7 +97,7 @@ export function SkillCard({ skill, onEdit }: SkillCardProps) {
 								{skill.category && (
 									<Badge
 										variant="outline"
-										className="text-gray-600 border-gray-300"
+										className="text-gray-600 border-gray-300 break-words"
 									>
 										<Tag className="w-3 h-3 mr-1" />
 										{skill.category}
@@ -107,27 +108,29 @@ export function SkillCard({ skill, onEdit }: SkillCardProps) {
 							{/* Progress Bar */}
 							<div className="w-full bg-gray-200 rounded-full h-2">
 								<div
-									className={`h-2 rounded-full transition-all duration-300 ${
-										skill.level === "Beginner"
+									className={`h-2 rounded-full transition-all duration-300 ${skill.level === "Beginner"
 											? "bg-red-500"
 											: skill.level === "Intermediate"
 												? "bg-yellow-500"
 												: skill.level === "Advanced"
 													? "bg-blue-500"
 													: "bg-green-500"
-									}`}
+										}`}
 									style={{
 										width: `${getLevelProgress(skill.level)}%`,
 									}}
 								/>
 							</div>
 						</div>
+					</div>
 
+					{/* Absolute positioned dropdown menu */}
+					<div className="absolute top-3 right-3">
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
-									className="h-8 w-8 p-0 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+									className="h-8 w-8 p-0 cursor-pointer opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity"
 								>
 									<MoreHorizontal className="h-4 w-4" />
 								</Button>

@@ -7,9 +7,10 @@ import { SIDEBAR_MENU_ITEMS } from "@/utils/constants";
 
 interface SidebarProps {
     isCollapsed: boolean;
+    onNavigate?: () => void;
 }
 
-export default function Sidebar({ isCollapsed }: SidebarProps) {
+export default function Sidebar({ isCollapsed, onNavigate }: SidebarProps) {
     const pathname = usePathname();
 
     const isActivePath = (href: string) => {
@@ -31,6 +32,7 @@ export default function Sidebar({ isCollapsed }: SidebarProps) {
                         <Link
                             key={label}
                             href={href || "#"}
+                            onClick={onNavigate}
                             className={cn(
                                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
                                 isActive
