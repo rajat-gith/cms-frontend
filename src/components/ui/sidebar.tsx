@@ -13,18 +13,16 @@ interface SidebarProps {
 export default function Sidebar({ isCollapsed, onNavigate }: SidebarProps) {
     const pathname = usePathname();
 
-    const isActivePath = (href: string) => {
-        return pathname === href;
-    };
+    const isActivePath = (href: string) => pathname === href;
 
     return (
         <div
             className={cn(
-                "h-full bg-muted text-muted-foreground py-6 transition-all duration-300 ease-in-out",
+                "h-full flex flex-col bg-muted text-muted-foreground py-6 transition-all duration-300 ease-in-out border-0 outline-none",
                 isCollapsed ? "px-2" : "px-4"
             )}
         >
-            <nav className="space-y-2">
+            <nav className="flex-1 space-y-2">
                 {SIDEBAR_MENU_ITEMS.map(({ label, icon: Icon, href }) => {
                     const isActive = href ? isActivePath(href) : false;
 
@@ -35,6 +33,7 @@ export default function Sidebar({ isCollapsed, onNavigate }: SidebarProps) {
                             onClick={onNavigate}
                             className={cn(
                                 "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                                "outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                                 isActive
                                     ? "bg-primary text-white"
                                     : "hover:bg-accent hover:text-accent-foreground"
