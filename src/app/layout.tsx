@@ -1,5 +1,4 @@
-// app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/custom/Navbar";
@@ -20,6 +19,12 @@ export const metadata: Metadata = {
         "Easily manage and publish content with a streamlined, intuitive CMS built with modern web technologies.",
 };
 
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+};
+
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 if (!CLIENT_ID) throw new Error("Google Client ID is not defined");
 
@@ -31,7 +36,7 @@ export default function RootLayout({
     return (
         <GoogleOAuthProvider clientId={CLIENT_ID!}>
             <html lang="en" className={openSans.className}>
-                <body className="h-screen flex flex-col overflow-hidden">
+                <body className="h-dvh flex flex-col overflow-hidden">
                     <Navbar />
                     <UserProvider>
                         <div className="flex-1 overflow-auto">
