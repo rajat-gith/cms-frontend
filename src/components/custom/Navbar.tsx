@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { Menu } from "lucide-react";
+import { CircleUserRound, ChevronDown, UserCircle } from "lucide-react";
 import { useUserStore } from "@/store/user.store";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
+
 } from "@/components/ui/dropdown-menu";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -49,13 +50,15 @@ export default function Navbar() {
                 {isAuthenticated && userProfile && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <button className="flex items-center gap-3 text-black dark:text-white bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 px-4 py-2 rounded-lg shadow-md transition-all cursor-pointer duration-200">
-                                <Menu className="w-6 h-6" />
-                                <span className="hidden sm:block text-lg font-medium">
-                                    Hi, {userProfile.username ?? "User"}
+                            <button className="flex items-center gap-2 text-black dark:text-white bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 pl-2 pr-3 py-2 rounded-full shadow-md transition-all cursor-pointer duration-200">
+                                <UserCircle className="w-7 h-7" />   {/* cleaner circular avatar */}
+                                <span className="hidden sm:block text-base font-medium">
+                                    {userProfile.username ?? "User"}
                                 </span>
+                                <ChevronDown className="w-4 h-4 opacity-60" />
                             </button>
                         </DropdownMenuTrigger>
+
                         <DropdownMenuContent
                             align="end"
                             className="bg-muted dark:bg-gray-900 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 p-2 w-40"
