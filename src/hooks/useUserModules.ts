@@ -138,10 +138,10 @@ export function useUserModules() {
 					newItem = res.data;
 				}
 
-				if (!newItem?._id) {
-					console.error(`Created ${key} item missing _id:`, newItem);
+				if (!newItem?._id && !newItem?.id) {
+					console.error(`Created ${key} item missing ID:`, newItem);
 					console.error(`Full response:`, res.data);
-					throw new Error(`Invalid response: missing _id field`);
+					throw new Error(`Invalid response: missing ID field`);
 				}
 
 				addItem(key, newItem);

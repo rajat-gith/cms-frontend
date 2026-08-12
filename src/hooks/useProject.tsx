@@ -67,7 +67,7 @@ export function useProjects() {
         await updateModuleItem("projects", id, data);
         setProjects((prev) =>
           prev.map((project) =>
-            project._id === id
+            project.id === id
               ? { ...project, ...data, updatedAt: new Date() }
               : project
           )
@@ -92,7 +92,7 @@ export function useProjects() {
       setError(null);
       try {
         await deleteModuleItem("projects", id);
-        setProjects((prev) => prev.filter((project) => project._id !== id));
+        setProjects((prev) => prev.filter((project) => project.id !== id));
         toast.success("Project deleted successfully!");
       } catch (err) {
         const errorMessage =
@@ -233,7 +233,7 @@ export function useProjects() {
 
   const getProjectById = useCallback(
     (id: string) => {
-      return projects.find((project) => project._id === id);
+      return projects.find((project) => project.id === id);
     },
     [projects]
   );

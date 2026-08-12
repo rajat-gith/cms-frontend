@@ -46,13 +46,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
   const otherLinks =
     Array.isArray(project.otherLinks)
       ? project.otherLinks
-      : typeof project.otherLinks === "string"
+      : typeof project.otherLinks === "string" && project.otherLinks.trim()
       ? (() => {
           try {
             const parsed = JSON.parse(project.otherLinks);
-            return Array.isArray(parsed) ? parsed : [];
+            return Array.isArray(parsed) ? parsed : [project.otherLinks];
           } catch {
-            return [];
+            return project.otherLinks
+              .split(",")
+              .map((link) => link.trim())
+              .filter(Boolean);
           }
         })()
       : [];
@@ -79,7 +82,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete }) 
               <Edit size={16} />
             </button>
             <button
-              onClick={() => onDelete(project._id)}
+              onClick={() => onDelete(project.id)}
               className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
               title="Delete Project"
             >

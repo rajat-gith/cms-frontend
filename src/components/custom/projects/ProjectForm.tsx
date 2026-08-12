@@ -57,7 +57,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 				achievements: Array.isArray(project.achievements)
 					? project.achievements
 					: project.achievements
-					? (() => {
+						? (() => {
 							try {
 								const parsed = JSON.parse(
 									project.achievements as unknown as string
@@ -66,8 +66,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 							} catch {
 								return [];
 							}
-					  })()
-					: [],
+						})()
+						: [],
 				duration: {
 					startDate: new Date(project.duration.startDate),
 					endDate: project.duration.endDate
@@ -132,7 +132,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 			linkedinURL: "",
 			twitterURL: "",
 			otherLinks: [],
-			_id: "",
+			id: "",
 		};
 		setFormData({
 			...formData,
@@ -597,9 +597,8 @@ const ProjectForm: React.FC<ProjectFormProps> = ({
 						<button
 							type="submit"
 							disabled={isLoading}
-							className={`px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 w-full sm:w-auto ${
-								isLoading ? "opacity-50 cursor-not-allowed" : ""
-							}`}
+							className={`px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 w-full sm:w-auto ${isLoading ? "opacity-50 cursor-not-allowed" : ""
+								}`}
 						>
 							{isLoading
 								? "Saving..."

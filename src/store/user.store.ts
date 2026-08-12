@@ -154,7 +154,9 @@ export const useUserModuleStore = create<UserModuleStore>((set) => ({
 		set((state) => ({
 			modules: {
 				...state.modules,
-				[key]: state.modules[key].filter((item) => item._id !== id),
+				[key]: state.modules[key].filter(
+					(item) => ((item as any)._id ?? (item as any).id) !== id
+				),
 			},
 		})),
 }));

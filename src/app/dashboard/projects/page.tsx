@@ -65,7 +65,7 @@ const ProjectsPage: React.FC = () => {
 		if (!editingProject) return;
 
 		try {
-			await updateModuleItem("projects", editingProject._id, data);
+			await updateModuleItem("projects", editingProject.id, data);
 			setEditingProject(null);
 			setShowForm(false);
 			toast.success("Project updated successfully!");

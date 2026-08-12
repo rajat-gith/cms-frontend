@@ -89,7 +89,7 @@ export function ExtraModuleDashboard() {
 									<p className="text-sm text-muted-foreground line-clamp-2">
 										{config.description}
 									</p>
-									// Responsive Manage Button
+									{/* // Responsive Manage Button */}
 									<Button
 										variant="ghost"
 										className="w-full mt-3 justify-start p-0 h-auto text-sm font-medium"

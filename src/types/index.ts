@@ -137,7 +137,7 @@ export type Experience = {
 };
 
 export type TeamMember = {
-    _id: string;
+    id?: string;
     name: string;
     linkedinURL?: string;
     twitterURL?: string;
@@ -317,7 +317,7 @@ export const SKILL_CATEGORIES = [
 
 // types/project.ts
 export interface Project {
-    _id: string;
+    id: string;
     userId: string;
     title: string;
     description?: string;
@@ -340,7 +340,7 @@ export interface Project {
 }
 
 export interface ProjectFormData
-    extends Omit<Project, "_id" | "userId" | "createdAt" | "updatedAt"> {}
+    extends Omit<Project, "id" | "userId" | "createdAt" | "updatedAt"> {}
 
 export interface ProjectFilters {
     search: string;
